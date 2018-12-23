@@ -1,0 +1,55 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 's7uploads/style.css' %}">
+
+<div id="stripe"></div>
+
+<div id = "banner">
+	<nav>
+	<ul>
+	<li ><a href="#" class="lightlink">infini<span class="sitecolor">7</span>y</a></li>
+	<li ><a href="#" class="lightlink">Downloads</a></li>
+	<li><a href="#" class="lightlink">Reviews</a></li>
+	<li><a href="#" class="lightlink">Users</a></li>
+	<li><a href="#" class="lightlink" >About</a></li>
+	<li><a href="#" class="lightlink">Community</a></li>
+	<li><a href="#" class="boldlink">Sign Up</a></li>
+	<li><a href="#" class="boldlink">Log In</a></li>
+	<ul/>
+	</nav>
+</div>
+
+<section id="upload">
+
+{% if latest_upload_list %}
+
+	<h1>Latest Uploads</h1>
+	<ul>
+	{% for upload in latest_upload_list %}
+
+
+		<li>
+		<section id="imgcrop">
+		<img src="{%static upload.indexScreenshot %}" alt="Upload Screenshot">
+		</section>
+		
+		<div id="blackstripe"></div>
+
+		<section id="uploadtext">
+		<h2>{{ upload.title }} {{ upload.versionNumber }} <a href="#">Download</a></h2>
+		<h3>{{ upload.user.username }} on {{ upload.uploadDate }} </h3>
+		<p>{{ upload.description|truncatewords:20 }}</p>
+		<h4> Notes: </h4>
+		<p> {{ upload.versionNotes|truncatewords:10 }} </p>
+		</section>
+		</li>
+	{% endfor %}
+	</ul>
+
+{% else %}
+
+	<p> Nothing to see here. </p>
+
+{% endif %}
+
+</section>
