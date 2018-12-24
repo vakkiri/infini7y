@@ -1,4 +1,6 @@
 import datetime
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404, render
 from django.db import models
 
 class User(models.Model):
@@ -17,8 +19,14 @@ class Upload(models.Model):
 	#ratings..
 
 	def indexScreenshot(self):
-		url = "/s7uploads/images/" + (Screenshot.objects.filter(upload=self)[0].url)
-		return url
+		screenshot = get_object_or_404(Screenshot, upload=self);
+		try:
+			url = "/s7uploads/images/" + screenshot.url
+		except (KeyError, Screenshot.DoesNotExist):
+			#ummm just don't render anything? how 2 do
+			return url
+		else:
+			return url
 
 	def __str__(self):
 		return self.title
