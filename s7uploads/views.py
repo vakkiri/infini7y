@@ -15,3 +15,9 @@ class IndexView(generic.ListView):
 		numUploads = 10
 		#return 10 most recent uploads
 		return Upload.objects.filter(uploadDate__lte=timezone.now()).order_by('-uploadDate')[:numUploads]
+
+class UploadView(generic.DetailView):
+	model = Upload
+	template_name = 's7uploads/upload.html'
+	def get_queryset(self):
+		return Upload.objects.filter(uploadDate__lte=timezone.now())

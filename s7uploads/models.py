@@ -19,14 +19,7 @@ class Upload(models.Model):
 	#ratings..
 
 	def indexScreenshot(self):
-		screenshot = get_object_or_404(Screenshot, upload=self);
-		try:
-			url = "/s7uploads/images/" + screenshot.url
-		except (KeyError, Screenshot.DoesNotExist):
-			#ummm just don't render anything? how 2 do
-			return url
-		else:
-			return url
+		return Screenshot.objects.filter(upload=self)[0].url
 
 	def __str__(self):
 		return self.title

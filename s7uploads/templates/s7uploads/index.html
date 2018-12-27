@@ -32,16 +32,13 @@
 	<ul>
 	{% for upload in latest_upload_list %}
 
-
 		<li>
 		<section id="imgcrop">
-		<img src="{%static upload.indexScreenshot %}" alt="Upload Screenshot">
+		<img src="{%static upload.indexScreenshot %}" alt="Upload Screenshot" id="middle"></img>
 		</section>
 		
-		<div id="blackstripe"></div>
-
 		<section id="uploadtext">
-		<h2><a href="#">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
+		<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
 		<a id="download" href="#">Download</a>
 		<h3>{{ upload.user.username }} on {{ upload.uploadDate }} </h3>
 		<p>{{ upload.description|truncatewords:20 }}</p>
