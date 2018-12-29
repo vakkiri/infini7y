@@ -9,6 +9,12 @@ div#stripe {
 	width: 100%;
 }
 
+div#blackstripe {
+	background-color: rgb(60, 60, 65);
+	height: 2px;
+	width: 100%;
+}
+
 div#banner {
 	background-color: rgb(15, 5, 10);
 	position: relative;
@@ -102,6 +108,19 @@ div#banner {
 	padding-left: 64px;
 }
 
+#review {
+	margin: 0 auto;
+	margin-top: 32px;
+	font-family: sans-serif;
+	width: 512px;
+	float: left;
+	position: relative;
+}
+
+#review h2 {
+	text-decoration: none;
+}
+
 #sidebar ul {
 	margin-top: 16px;
 }
@@ -141,6 +160,18 @@ div#banner {
 
 #upload h2 a {
 	color: rgb(15, 5, 10);
+}
+
+#review li{
+	padding: 6px;
+}
+
+#review h2 {
+	text-decoration: none;
+}
+
+#review-rating {
+	float: right;
 }
 
 #download {

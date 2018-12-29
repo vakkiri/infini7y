@@ -8,28 +8,41 @@
 
 
 <section id="upload">
-		
+
 	<section id="uploadtext">
 		<h2><a href="#">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
 		<a id="download" href="#">Download</a>
 		<h3>{{ upload.user.username }} on {{ upload.uploadDate }} </h3>
-		<p>{{ upload.description }}</p>
+		<p>{{ upload.description|linebreaks }}</p>
 		<h4> Version {{upload.versionNumber}} Notes: </h4>
 		<p> {{ upload.versionNotes }} </p>
 	</section>
 
-	
+	{% if upload.review_set %}
+	<section id="review">
+		<h1>Reviews</h1>
+		<div id="blackstripe"></div>
+		<br>
+		<ul>
+		{% for review in upload.review_set.all %}
+			<li>
+			<h2 class="review">{{review.title}}</h2>
+			<h3 id="review-rating">{{review.rating}}/5</h3>
+			<h3>By {{review.user.username}} on {{review.pubDate}}</h3>
+			<p>{{review.text|linebreaks}}</p>
+			</li>
+		{% endfor %}
+		</ul>
+	</section>
+	{% endif %}
 </section>
 
 <section id="thumbnailscreenshots">
-		{% for screenshot in upload.screenshot_set.all %}
-			<section id="thumbnailscreenshot">
-			<img src="{%static screenshot.url %}" alt="{%static screenshot.url %}"></img>
-			</section>
-		{% endfor %}
-</section>
-
-
+	{% for screenshot in upload.screenshot_set.all %}
+		<section id="thumbnailscreenshot">
+		<img src="{%static screenshot.url %}" alt="{%static screenshot.url %}"></img>
+		</section>
+	{% endfor %}
 </section>
 
 {% endblock %}
