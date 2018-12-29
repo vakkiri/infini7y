@@ -33,14 +33,20 @@
 	{% for upload in latest_upload_list %}
 
 		<li>
+		{% if upload.screenshot_set.exists %}
 		<section id="imgcrop">
 		<img src="{%static upload.indexScreenshot %}" alt="Upload Screenshot" id="middle"></img>
 		</section>
+		{% endif %}
 		
+
 		<section id="uploadtext">
 		<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
 		<a id="download" href="#">Download</a>
 		<h3>{{ upload.user.username }} on {{ upload.uploadDate }} </h3>
+
+		<div id="graystripe"></div>
+
 		<p>{{ upload.description|truncatewords:20 }}</p>
 		<h4> Version {{upload.versionNumber}} Notes: </h4>
 		<p> {{ upload.versionNotes|truncatewords:10 }} </p>

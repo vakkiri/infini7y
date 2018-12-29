@@ -7,33 +7,46 @@
 <section id="main-content">
 
 
+	<a id="download" href="#">Download</a>
+	<h1>{{ upload.title }} by {{ upload.user.username }}</h1>
+
+
+	<div id="blackstripe"></div>
+
 <section id="upload">
 
 	<section id="uploadtext">
-		<h2><a href="#">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
-		<a id="download" href="#">Download</a>
 		<h3>{{ upload.user.username }} on {{ upload.uploadDate }} </h3>
 		<p>{{ upload.description|linebreaks }}</p>
 		<h4> Version {{upload.versionNumber}} Notes: </h4>
-		<p> {{ upload.versionNotes }} </p>
+		<p> {{ upload.versionNotes|linebreaks }} </p>
+		<h4> Upload Statistics: </h4>
 	</section>
 
-	{% if upload.review_set %}
-	<section id="review">
-		<h1>Reviews</h1>
-		<div id="blackstripe"></div>
-		<br>
-		<ul>
-		{% for review in upload.review_set.all %}
-			<li>
-			<h2 class="review">{{review.title}}</h2>
-			<h3 id="review-rating">{{review.rating}}/5</h3>
-			<h3>By {{review.user.username}} on {{review.pubDate}}</h3>
-			<p>{{review.text|linebreaks}}</p>
-			</li>
-		{% endfor %}
-		</ul>
-	</section>
+	{% if upload.review_set.exists %}
+		<section id="review">
+			<h1>Reviews</h1>
+			<div id="blackstripe"></div>
+
+			<a id="download" href="#">+ Add Review</a>
+			<br>
+
+			<ul>
+			{% for review in upload.review_set.all %}
+				<li>
+				<h2 class="review">{{review.title}}</h2>
+				<h3 id="review-rating">{{review.rating}}/5</h3>
+				<h3>By {{review.user.username}} on {{review.pubDate}}</h3>
+				<p>{{review.text|linebreaks}}</p>
+				</li>
+			{% endfor %}
+			</ul>
+		</section>
+	{% else %}
+		<h1>No reviews yet!</h1>
+			<a id="download" href="#">+ Add Review</a>
+			<br>
+		</section>
 	{% endif %}
 </section>
 
