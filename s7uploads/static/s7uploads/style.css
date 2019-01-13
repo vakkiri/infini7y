@@ -110,19 +110,6 @@ div#banner {
 	z-index: 0;
 }
 
-#thumbnailscreenshot:hover {
-	overflow: visible;
-}
-
-
-#thumbnailscreenshot img:hover {
-	width: 512px;
-	height: auto;
-	z-index: 1;
-	position: relative;
-	border-radius: 8px;
-}
-
 #thumbnailscreenshot img {
 	height: 100%;
 }
@@ -141,7 +128,6 @@ div#banner {
 
 #review {
 	margin: 0 auto;
-	margin-top: 32px;
 	width: 512px;
 	float: left;
 	position: relative;
@@ -193,7 +179,7 @@ div#banner {
 }
 
 #review li{
-	padding: 6px;
+	padding: 8px;
 }
 
 #review h2 {
@@ -266,6 +252,35 @@ div#banner {
 	margin-right: 8px;
 }
 
+#userlist ul {
+	width: 1024px;
+}
+
+#userlist li {
+	position: relative;
+	float: left;
+	margin-right: 32px;
+	background-color: rgb(245, 245, 250);
+	border-color: rgb(235, 235, 240);
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 32px;
+	padding-right: 32px;
+}
+
+#userlist li a {
+	font-size: 18px;
+	font-weight: bold;
+	color: rgb(60, 60, 65);
+}
+
+#userlist h1 {
+	font-size: 14px;
+	margin-top: 4px;
+	color: rgb(80, 80, 85);
+}
+
 .sitecolor {
 	color: rgb(170, 120, 170);
-}
+e
+

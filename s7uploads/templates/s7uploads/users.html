@@ -1,0 +1,54 @@
+{% extends "s7uploads/navbar.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section id="main-content">
+<section id="sidebar">
+	<h1>Search / Sort</h1>
+	<section id="sidebar-content">
+	<h2>Search for:</h2>
+	<ul>
+		<li> <a href="#">Maps</a></li>
+		<li> <a href="#">Scenarios</a></li>
+		<li> <a href="#">Plugins + Scripts</a></li>
+		<li> <a href="#">Utilities</a></li>
+		<li> <a href="#">Physics</a></li>
+	</ul>
+	<h2>Search by:</h2>
+	<ul>
+		<li> <a href="#">Ratings</a></li>
+		<li> <a href="#">Downloads</a></li>
+	</ul>
+	</section>
+</section>
+
+<section id="upload">
+
+{% if user_list %}
+	<h1>Users</h1>
+
+	<section id="userlist">
+
+	<ul>
+
+	{% for user in user_list %}
+		<li> 
+		<a href="#"> {{ user.username }} </a>
+		<h1>0 uploads, 0 reviews</h1>
+		</li>
+	{% endfor %}
+
+	</ul>
+
+	</section>
+{% else %}
+
+	<p> Nothing to see here. </p>
+
+{% endif %}
+
+</section>
+</section>
+{% endblock %}

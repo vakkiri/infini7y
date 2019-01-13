@@ -1,0 +1,51 @@
+{% extends "s7uploads/navbar.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section id="main-content">
+<section id="sidebar">
+	<h1>Search / Sort</h1>
+	<section id="sidebar-content">
+	<h2>Search for:</h2>
+	<ul>
+		<li> <a href="#">Maps</a></li>
+		<li> <a href="#">Scenarios</a></li>
+		<li> <a href="#">Plugins + Scripts</a></li>
+		<li> <a href="#">Utilities</a></li>
+		<li> <a href="#">Physics</a></li>
+	</ul>
+	<h2>Search by:</h2>
+	<ul>
+		<li> <a href="#">Ratings</a></li>
+		<li> <a href="#">Downloads</a></li>
+	</ul>
+	</section>
+</section>
+
+<section id="upload">
+
+{% if latest_review_list %}
+	<h1>Latest Reviews</h1>
+	<section id="review">
+		<ul>
+		{% for review in latest_review_list %}
+			<li>
+			<h2 class="review">{{ review.title }}</h2>
+			<h3 id="review-rating">{{review.rating}}/5</h3>
+			<h3>By {{ review.user.username }} on {{ review.pubDate }}</h3>
+			<p>{{review.text|linebreaks}}</p>
+			</li>
+		{% endfor %}
+		</ul>
+	</section>
+{% else %}
+
+	<p> Nothing to see here. </p>
+
+{% endif %}
+
+</section>
+</section>
+{% endblock %}
