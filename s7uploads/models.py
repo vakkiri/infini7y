@@ -7,6 +7,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class User(models.Model):
 	username = models.CharField(max_length = 50)
 
+	def num_uploads(self):
+		return Upload.objects.filter(user=self).count()
+
+	def num_reviews(self):
+		return Review.objects.filter(user=self).count()
+
 	def __str__(self):
 		return self.username
 
