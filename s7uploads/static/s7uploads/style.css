@@ -51,6 +51,28 @@ div#banner {
 	display: inline;
 }
 
+#signup form {
+	font-size: 14px;
+	font-family: sans-serif;
+}
+
+#signup h1 {
+	margin-bottom: 16px;
+}
+
+#signup form li {
+	list-style: none;
+	color: rgb(115, 110, 110);
+}
+
+#signup form p {
+	color: rgb(115, 110, 110);
+}
+
+#signup form input {
+	margin-bottom: 8px;
+}
+
 #main-content {
 	width: 900px;
 	margin: 0 auto;

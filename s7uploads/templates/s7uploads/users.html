@@ -35,7 +35,7 @@
 
 	{% for user in user_list %}
 		<li> 
-		<a href="#"> {{ user.username }} </a>
+		<a href="#"> {{ user.user.username }} </a>
 		<h1>{{ user.num_uploads }} uploads, {{ user.num_reviews }} reviews</h1>
 		</li>
 	{% endfor %}

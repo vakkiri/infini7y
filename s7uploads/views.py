@@ -1,21 +1,22 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.utils import timezone
 from django.urls import path
 
-from .models import Upload, Review, User
-from .forms import ReviewForm
+from .models import Upload, Review, S7User
+from .forms import ReviewForm, SignUpForm
 
 def add_review(request, pk):
-	if request.method == "POST":
+	if request.method == 'POST':
 		form = ReviewForm(request.POST)
 
 		if form.is_valid():
 			review = form.save(commit=False)
 			review.pubDate = timezone.now()
 			review.upload = Upload.objects.get(pk=pk)
-			review.user = User.objects.get(pk=1)	# TODO: check that a usr is logged
+			review.user = S7User.objects.get(pk=1)	# TODO: check that a usr is logged
 			review.save()
 
 			url = '/s7uploads/uploads/' + str(pk)
@@ -26,6 +27,20 @@ def add_review(request, pk):
 
 	return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
 
+def signup(request):
+	if request.method == 'POST':
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=raw_password)
+			login(request, user)
+			return redirect('s7uploads:index')
+	else:
+		form = SignUpForm()
+
+	return render(request, 's7uploads/signup.html', {'form' : form})
 
 class IndexView(generic.ListView):
 	model = Upload
@@ -47,12 +62,13 @@ class ReviewView(generic.ListView):
 		return Review.objects.filter(pubDate__lte=timezone.now()).order_by('-pubDate')[:numReviews]
 
 class UserListView(generic.ListView):
-	model = User
+	model = S7User
 	template_name = 's7uploads/users.html'
 	context_object_name = 'user_list'
 
 	def get_queryset(self):
-		return User.objects.all().extra( select={'lower_name':'lower(username)'}).order_by('lower_name')
+		# return S7User.objects.all().extra( select={'lower_name':'lower(user.username)'}).order_by('lower_name')
+		return S7User.objects.all()
 
 class UploadView(generic.DetailView):
 	model = Upload

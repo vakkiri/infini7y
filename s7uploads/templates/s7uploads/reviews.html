@@ -34,7 +34,7 @@
 			<li>
 			<h2 class="review">{{ review.title }}</h2>
 			<h3 id="review-rating">{{review.rating}}/5</h3>
-			<h3>By {{ review.user.username }} on {{ review.pubDate }}</h3>
+			<h3>By {{ review.user.user.username }} on {{ review.pubDate }}</h3>
 			<p>{{review.text|linebreaks}}</p>
 			</li>
 		{% endfor %}
