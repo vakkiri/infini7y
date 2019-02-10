@@ -28,14 +28,18 @@
 			<h1>Reviews</h1>
 			<div id="blackstripe"></div>
 
-			<a id="download" href="#">+ Add Review</a>
 			<br>
-			<br>
-			<form action="add_review" method="post">
-				{% csrf_token %}
-				{{ form }}
-				<input type="submit" value="Submit">
-			</form>
+
+			{% if form %}
+				<form action="add_review" method="post">
+					{% csrf_token %}
+					{{ form }}
+					<input type="submit" value="Submit">
+				</form>
+			{% else %}
+				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
+			{% endif %}
+
 			<br>
 
 			<ul>
@@ -51,7 +55,16 @@
 		</section>
 	{% else %}
 		<h1>No reviews yet!</h1>
-			<a id="download" href="#">+ Add Review</a>
+			{% if form %}
+				<form action="add_review" method="post">
+					{% csrf_token %}
+					{{ form }}
+					<input type="submit" value="Submit">
+				</form>
+			{% else %}
+				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
+			{% endif %}
+
 			<br>
 		</section>
 	{% endif %}

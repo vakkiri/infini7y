@@ -24,7 +24,7 @@ def add_review(request, pk):
 	else:
 		form = ReviewForm()
 
-	return render(request, 's7uploads/upload.html', {'upload': pk, 'form': form})
+	return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
 
 
 class IndexView(generic.ListView):
@@ -60,7 +60,9 @@ class UploadView(generic.DetailView):
 	def get_queryset(self):
 		return Upload.objects.filter(uploadDate__lte=timezone.now())
 
+	'''
 	def get_context_data(self, **kwargs):
 		context = super(UploadView, self).get_context_data(**kwargs)
 		context['form'] = ReviewForm()
 		return context
+	'''
