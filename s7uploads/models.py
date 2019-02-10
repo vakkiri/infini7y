@@ -24,6 +24,7 @@ class Upload(models.Model):
 	versionNotes = models.TextField(verbose_name="Version Notes")
 	uploadDate = models.DateTimeField('date published')
 	versionNumber = models.DecimalField(max_digits=5, decimal_places = 1)
+
 	def indexScreenshot(self):
 		return Screenshot.objects.filter(upload=self)[0].url
 	def __str__(self):

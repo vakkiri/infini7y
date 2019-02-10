@@ -30,6 +30,13 @@
 
 			<a id="download" href="#">+ Add Review</a>
 			<br>
+			<br>
+			<form action="add_review" method="post">
+				{% csrf_token %}
+				{{ form }}
+				<input type="submit" value="Submit">
+			</form>
+			<br>
 
 			<ul>
 			{% for review in upload.review_set.all %}
