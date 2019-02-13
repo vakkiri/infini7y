@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.utils import timezone
@@ -27,9 +28,30 @@ def add_review(request, pk):
 
 	return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
 
+def user_login(request):
+	if request.method == 'POST':
+		form = AuthenticationForm(data=request.POST)
+		
+		if form.is_valid():
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password')
+			user = authenticate(request, username=username, password=password)
+			if user is not None:
+				login(request, user)
+				return redirect('s7uploads:index')
+			else:
+				# TODO: display invalid login message
+				form = AuthenticationForm()
+				return render(request, 's7uploads/login.html', {'form': form})
+	else:
+		form = AuthenticationForm()
+
+	return render(request, 's7uploads/login.html', {'form': form})
+
 def signup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
+
 		if form.is_valid():
 			form.save()
 			username = form.cleaned_data.get('username')
@@ -51,6 +73,15 @@ class IndexView(generic.ListView):
 		numUploads = 10
 		#return 10 most recent uploads
 		return Upload.objects.filter(uploadDate__lte=timezone.now()).order_by('-uploadDate')[:numUploads]
+
+	def get_context_data(self, **kwargs):
+		c = super(generic.ListView, self).get_context_data(**kwargs)
+		user = self.request.user
+		if not user.is_anonymous:
+			s7user = S7User.objects.filter(user=user)[:1]
+			if s7user:
+				c['s7user'] = s7user.get()
+		return c
 
 class ReviewView(generic.ListView):
 	model = Review
@@ -75,10 +106,3 @@ class UploadView(generic.DetailView):
 	template_name = 's7uploads/upload.html'
 	def get_queryset(self):
 		return Upload.objects.filter(uploadDate__lte=timezone.now())
-
-	'''
-	def get_context_data(self, **kwargs):
-		context = super(UploadView, self).get_context_data(**kwargs)
-		context['form'] = ReviewForm()
-		return context
-	'''

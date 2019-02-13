@@ -2,7 +2,9 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 's7uploads/style.css' %}">
 
-<div id="stripe"></div>
+{% block content %}
+
+{% endblock %}
 
 {% block navbar %}
 <div id = "banner">
@@ -15,11 +17,10 @@
 	<li><a href="#" class="lightlink" >About</a></li>
 	<li><a href="#" class="lightlink">Community</a></li>
 	<li><a href="{%url 's7uploads:signup' %}" class="boldlink">Sign Up</a></li>
-	<li><a href="#" class="boldlink">Log In</a></li>
+	<li><a href="{%url 's7uploads:login' %}" class="boldlink">Log In</a></li>
 	<ul/>
 	</nav>
 </div>
-{% endblock %}
 
-{% block content %}
+<div id="stripe"></div>
 {% endblock %}

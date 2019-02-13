@@ -5,8 +5,27 @@
 {% block content %}
 
 <section id="main-content">
+	<section id="userbannertitle">
+	</section>
+	{% if user %}
+		<section id="userbanner">
+		{% if user.is_anonymous %}
+		<h4>You are not logged in!</h4>
+		{% else %}
+		<img src="/static/s7uploads/images/default_profile.jpg"></img>
+		<section id="userbannertext">
+		<h3>{{ user.username }}</h3>
+		<h5>{{ s7user.num_uploads }} uploads</h5>
+		<h5>{{ s7user.num_reviews }} reviews</h5>
+		<section id="sideupload">
+		+ Upload
+		</section>
+		</section>
+		{% endif %}
+		</section>
+	{% endif %}
+
 <section id="sidebar">
-	<h1>Search / Sort</h1>
 	<section id="sidebar-content">
 	<h2>Search for:</h2>
 	<ul>
@@ -28,7 +47,6 @@
 
 {% if latest_upload_list %}
 
-	<h1>Latest Uploads</h1>
 	<ul>
 	{% for upload in latest_upload_list %}
 
