@@ -24,36 +24,28 @@
 		</section>
 {% endif %}
 
-<section id="singleupload">
+	<a id="download" href="#">Download</a>
+	<h1>{{ upload.title }} by {{ upload.user.user.username }}</h1>
+
+
+	<div id="blackstripe"></div>
+
 <section id="upload">
-	<section id="uploadheader">
-		<a id="download" href="#">Download</a>
-		<h1>{{ upload.title }} by {{ upload.user.user.username }}</h1>
 
-
-		<div id="blackstripe"></div>
-
-		<section id="uploadtext">
-			<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
-			<p>{{ upload.description|linebreaks }}</p>
-			<h4> Version {{upload.versionNumber}} Notes: </h4>
-			<p> {{ upload.versionNotes|linebreaks }} </p>
-			<h4> Upload Statistics: </h4>
-		</section>
-
-		<section id="thumbnailscreenshots">
-			{% for screenshot in upload.screenshot_set.all %}
-				<section id="thumbnailscreenshot">
-				<img src="{%static screenshot.url %}" alt="{%static screenshot.url %}"></img>
-				</section>
-			{% endfor %}
-		</section>
+	<section id="uploadtext">
+		<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
+		<p>{{ upload.description|linebreaks }}</p>
+		<h4> Version {{upload.versionNumber}} Notes: </h4>
+		<p> {{ upload.versionNotes|linebreaks }} </p>
+		<h4> Upload Statistics: </h4>
 	</section>
 
 	{% if upload.review_set.exists %}
 		<section id="review">
 			<h1>Reviews</h1>
 			<div id="blackstripe"></div>
+
+			<br>
 
 			{% if form %}
 				<form action="add_review" method="post">
@@ -63,10 +55,9 @@
 				</form>
 			{% else %}
 				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
-			<br>
-			<br>
 			{% endif %}
 
+			<br>
 
 			<ul>
 			{% for review in upload.review_set.all %}
@@ -95,8 +86,13 @@
 		</section>
 	{% endif %}
 </section>
+
+<section id="thumbnailscreenshots">
+	{% for screenshot in upload.screenshot_set.all %}
+		<section id="thumbnailscreenshot">
+		<img src="{%static screenshot.url %}" alt="{%static screenshot.url %}"></img>
+		</section>
+	{% endfor %}
 </section>
 
-
-</section>
 {% endblock %}

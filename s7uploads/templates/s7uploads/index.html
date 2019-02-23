@@ -5,25 +5,24 @@
 {% block content %}
 
 <section id="main-content">
-	<section id="userbannertitle">
-	</section>
-	{% if user %}
-		<section id="userbanner">
+
+{% if user %}
+	<section id="userbanner">
 		{% if user.is_anonymous %}
-		<h4>You are not logged in!</h4>
+			<h4>You are not logged in!</h4>
 		{% else %}
-		<img src="/static/s7uploads/images/default_profile.jpg"></img>
-		<section id="userbannertext">
-		<h3>{{ user.username }}</h3>
-		<h5>{{ s7user.num_uploads }} uploads</h5>
-		<h5>{{ s7user.num_reviews }} reviews</h5>
-		<section id="sideupload">
-		+ Upload
-		</section>
-		</section>
+			<img src="/static/s7uploads/images/default_profile.jpg"></img>
+			<section id="userbannertext">
+			<h3>{{ user.username }}</h3>
+			<h5>{{ s7user.num_uploads }} uploads</h5>
+			<h5>{{ s7user.num_reviews }} reviews</h5>
+			<section id="sideupload">
+			+ Upload
+			</section>
+			</section>
 		{% endif %}
-		</section>
-	{% endif %}
+	</section>
+{% endif %}
 
 <section id="sidebar">
 	<section id="sidebar-content">
@@ -43,6 +42,7 @@
 	</section>
 </section>
 
+<section id="uploadlist">
 <section id="upload">
 
 {% if latest_upload_list %}
@@ -58,7 +58,7 @@
 		{% endif %}
 		
 
-		<section id="uploadtext">
+		<section id="indexuploadtext">
 		<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
 		<a id="download" href="#">Download</a>
 		<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
@@ -77,5 +77,7 @@
 {% endif %}
 
 </section>
+</section>
+
 </section>
 {% endblock %}

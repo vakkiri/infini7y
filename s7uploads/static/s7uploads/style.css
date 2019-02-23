@@ -34,7 +34,6 @@ div#graystripe {
 	border-color: rgb(240, 240, 245);
 	background-color: rgb(235, 235, 240);
 	float: right;
-	display: block;
 }
 
 #userbanner h3 {
@@ -138,7 +137,6 @@ div#banner {
 	width: 1024px;
 	margin: 0 auto;
 	margin-top: 96px;
-	display: block;
 	float: center;
 }
 
@@ -150,6 +148,7 @@ div#banner {
 #sidebar {
 	float: left;
 	position: relative;
+	clear: left;
 }
 
 #sidebar-content {
@@ -172,9 +171,13 @@ div#banner {
 	margin-left: 16px;
 }
 
+#uploadheader {
+	width: 800px;
+}
+
 #thumbnailscreenshots {
-	float: left;
-	margin-left: 124px;
+	float: right;
+	position: relative;
 }
 
 #thumbnailscreenshot {
@@ -204,15 +207,20 @@ div#banner {
 #upload {
 	margin: 0 auto;
 	width: 512px;
-	float: center;
 	position: relative;
 }
 
+#uploadlist {
+	float: center;
+}
+
+#singleupload {
+	float: left;
+}
+
 #review {
-	margin: 0 auto;
 	width: 512px;
 	float: left;
-	position: relative;
 }
 
 #review h2 {
@@ -234,8 +242,15 @@ div#banner {
 	margin-bottom: 16px;
 }
 
-#uploadtext {
+#indexuploadtext {
 	padding: 6px;
+}
+
+#uploadtext {
+	width: 512px;
+	padding: 6px;
+	float: left;
+	position: relative;
 }
 
 #sidebar h1 {
@@ -334,7 +349,7 @@ div#banner {
 }
 
 #userlist ul {
-	width: 1024px;
+	width: 512px;
 }
 
 #userlist li {
