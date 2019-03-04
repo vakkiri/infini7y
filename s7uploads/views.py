@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -7,7 +7,9 @@ from django.utils import timezone
 from django.urls import path
 
 from .models import Upload, Review, S7User
-from .forms import ReviewForm, SignUpForm
+from .forms import ReviewForm, SignUpForm, UploadFileForm
+
+from .filehandler import handle_uploaded_file
 
 def add_review(request, pk):
 	if request.method == 'POST':
@@ -48,6 +50,10 @@ def user_login(request):
 
 	return render(request, 's7uploads/login.html', {'form': form})
 
+def logout_view(request):
+	logout(request)
+	return redirect('s7uploads:index')
+
 def signup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
@@ -63,6 +69,16 @@ def signup(request):
 		form = SignUpForm()
 
 	return render(request, 's7uploads/signup.html', {'form' : form})
+
+def upload_file(request):
+	if request.method == 'POST':
+		form = UploadFileForm(request.POST, request.FILES)
+		if form.is_valid():
+			handle_uploaded_file(request.FILES['file'])
+			return HttpResponseRedirect('s7uploads:index')
+	else:
+		form = UploadFileForm()
+	return render(request, 's7uploads/newupload.html', {'form': form})
 
 class IndexView(generic.ListView):
 	model = Upload
@@ -92,6 +108,15 @@ class ReviewView(generic.ListView):
 		numReviews = 25
 		return Review.objects.filter(pubDate__lte=timezone.now()).order_by('-pubDate')[:numReviews]
 
+	def get_context_data(self, **kwargs):
+		c = super(generic.ListView, self).get_context_data(**kwargs)
+		user = self.request.user
+		if not user.is_anonymous:
+			s7user = S7User.objects.filter(user=user)[:1]
+			if s7user:
+				c['s7user'] = s7user.get()
+		return c
+
 class UserListView(generic.ListView):
 	model = S7User
 	template_name = 's7uploads/users.html'
@@ -101,8 +126,29 @@ class UserListView(generic.ListView):
 		# return S7User.objects.all().extra( select={'lower_name':'lower(user.username)'}).order_by('lower_name')
 		return S7User.objects.all()
 
+	def get_context_data(self, **kwargs):
+		c = super(generic.ListView, self).get_context_data(**kwargs)
+		user = self.request.user
+		if not user.is_anonymous:
+			s7user = S7User.objects.filter(user=user)[:1]
+			if s7user:
+				c['s7user'] = s7user.get()
+		return c
+
+
 class UploadView(generic.DetailView):
 	model = Upload
 	template_name = 's7uploads/upload.html'
+
 	def get_queryset(self):
 		return Upload.objects.filter(uploadDate__lte=timezone.now())
+	
+	def get_context_data(self, **kwargs):
+		c = super(generic.DetailView, self).get_context_data(**kwargs)
+		user = self.request.user
+		if not user.is_anonymous:
+			s7user = S7User.objects.filter(user=user)[:1]
+			if s7user:
+				c['s7user'] = s7user.get()
+		return c
+

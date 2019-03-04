@@ -7,21 +7,21 @@
 <section id="main-content">
 
 {% if user %}
-		<section id="userbanner">
+	<section id="userbanner">
 		{% if user.is_anonymous %}
-		<h4>You are not logged in!</h4>
+			<h4>You are not logged in!</h4>
 		{% else %}
-		<img src="/static/s7uploads/images/default_profile.jpg"></img>
-		<section id="userbannertext">
-		<h3>{{ user.username }}</h3>
-		<h5>{{ s7user.num_uploads }} uploads</h5>
-		<h5>{{ s7user.num_reviews }} reviews</h5>
-		<section id="sideupload">
-		+ Upload
-		</section>
-		</section>
+			<img src="/static/s7uploads/images/default_profile.jpg"></img>
+			<section id="userbannertext">
+			<h3>{{ user.username }}</h3>
+			<h5>{{ s7user.num_uploads }} uploads</h5>
+			<h5>{{ s7user.num_reviews }} reviews</h5>
+			<section id="sideupload">
+			<a href="{%url 's7uploads:new_upload' %}">+ Upload</a>
+			</section>
+			</section>
 		{% endif %}
-		</section>
+	</section>
 {% endif %}
 
 <section id="singleupload">

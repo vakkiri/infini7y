@@ -67,7 +67,7 @@ div#graystripe {
 	float: right;
 }
 
-#sideupload {
+#sideupload a {
 	color: rgb(250, 250, 255);
 	background-color: rgb(170, 120, 170);
 	text-decoration: none;

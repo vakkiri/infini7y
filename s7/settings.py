@@ -120,3 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = '~/code/s7/s7/s7uploads/static/'
+
+# Redirects
+
+LOGOUT_REDIRECT_URL = 'index/'
