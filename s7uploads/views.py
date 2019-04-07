@@ -74,7 +74,7 @@ def upload_file(request):
 	if request.method == 'POST':
 		form = UploadFileForm(request.POST, request.FILES)
 		if form.is_valid():
-			handle_uploaded_file(request.FILES['file'])
+			handle_uploaded_file(form, request.FILES['file'], request.user)
 			return redirect('s7uploads:index')
 	else:
 		form = UploadFileForm()

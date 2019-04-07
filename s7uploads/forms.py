@@ -17,5 +17,10 @@ class ReviewForm(forms.ModelForm):
 		fields = ('title', 'text', 'rating')
 
 class UploadFileForm(forms.Form):
-	title = forms.CharField(max_length=50)
-	file = forms.FileField()
+        title = forms.CharField(max_length=50)
+        description = forms.CharField()
+        versionNotes = forms.CharField()
+        versionNumber = forms.DecimalField(max_digits=5, decimal_places=1)
+        file = forms.FileField()
+
+

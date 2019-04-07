@@ -7,8 +7,8 @@
 <section id="main-content">
 
 {% if user %}
-	<section id="userbanner">
-		{% if user.is_anonymous %}
+    <section id="userbanner">
+        {% if user.is_anonymous %}
 			<h4>You are not logged in!</h4>
 		{% else %}
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
@@ -26,7 +26,14 @@
 
 <section id="sidebar">
 	<section id="sidebar-content">
-	<h2>Search for:</h2>
+	<h2>Search:</h2>
+	<h2>Sort by:</h2>
+	<ul>
+		<li> <a href="#">Ratings</a></li>
+		<li> <a href="#">Downloads</a></li>
+
+	</ul>
+    <h2>Filter by:</h2>
 	<ul>
 		<li> <a href="#">Maps</a></li>
 		<li> <a href="#">Scenarios</a></li>
@@ -34,11 +41,7 @@
 		<li> <a href="#">Utilities</a></li>
 		<li> <a href="#">Physics</a></li>
 	</ul>
-	<h2>Search by:</h2>
-	<ul>
-		<li> <a href="#">Ratings</a></li>
-		<li> <a href="#">Downloads</a></li>
-	</ul>
+
 	</section>
 </section>
 

@@ -24,19 +24,34 @@
 	</section>
 	{% endif %}
 
-	<h1>Upload File</h1>
-
-	<div id="blackstripe"></div>
-
+	
+	<section id="singleupload">
 	<section id="upload">
+		<section id="uploadheader">
+			<h1>Upload File</h1>
 
+			<div id="blackstripe"></div>
 
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
-			{{ form }}
+            <label for="{{ form.title.id_for_label }}">Title</label>
+			{{ form.title }}
+            <label for="{{ form.title.id_for_label }}">Version Number</label>
+            {{ form.versionNumber }}
+            <br>
+            <label for="{{ form.title.id_for_label }}">Description</label>
+            {{ form.description.as_textarea }}
+            <br>
+            <label for="{{ form.title.id_for_label }}">Version Notes</label>
+            {{ form.versionNotes.as_textarea }}
+            <br>
+            <label for="{{ form.title.id_for_label }}">Choose file...</label>
+            {{ form.file }}
 			<input type="submit" value="Submit">
 		</form>
+		</section>
 	 
+	</section>
 	</section>
 
 </section>

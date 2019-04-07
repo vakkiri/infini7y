@@ -375,7 +375,14 @@ div#banner {
 	color: rgb(80, 80, 85);
 }
 
+#upload label {
+    font-size: 14px;
+    display: block;
+}
+
 .sitecolor {
 	color: rgb(170, 120, 170);
-e
+}
+
+
 
