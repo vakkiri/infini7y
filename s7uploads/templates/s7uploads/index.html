@@ -63,7 +63,7 @@
 
 		<section id="indexuploadtext">
 		<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ upload.title }} {{ upload.versionNumber }}</a></h2>
-		<a id="download" href="#">Download</a>
+        <a id="download" href="{%url 's7uploads:download' upload.id %}">Download</a>
 		<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
 		<p>{{ upload.description|truncatewords:20 }}</p>
 		<h4> Version {{upload.versionNumber}} Notes: </h4>

@@ -37,8 +37,11 @@ class Upload(models.Model):
     versionNumber = models.DecimalField(max_digits=5, decimal_places = 1)
     tagline = models.TextField()
 
+
     def indexScreenshot(self):
         return Screenshot.objects.filter(upload=self)[0].url
+
+
     def __str__(self):
         return self.title
 

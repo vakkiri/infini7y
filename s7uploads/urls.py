@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 
@@ -13,4 +15,5 @@ urlpatterns = [
 	path('uploads/<int:pk>/add_review', views.add_review, name='add_review'),
 	path('reviews/', views.ReviewView.as_view(), name='reviews'),
 	path('users/', views.UserListView.as_view(), name='users'),
-]
+        path('download/<int:pk>', views.download_file, name='download'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
