@@ -16,4 +16,4 @@ urlpatterns = [
 	path('reviews/', views.ReviewView.as_view(), name='reviews'),
 	path('users/', views.UserListView.as_view(), name='users'),
         path('download/<int:pk>', views.download_file, name='download'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

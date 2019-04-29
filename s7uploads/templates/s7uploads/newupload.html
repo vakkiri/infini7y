@@ -45,8 +45,12 @@
             <label for="{{ form.title.id_for_label }}">Version Notes</label>
             {{ form.versionNotes.as_textarea }}
             <br>
+            <label for="{{ form.title.id_for_label }}">Upload Screenshots...</label>
+            {{ form.screenshots }}
+            <br>
             <label for="{{ form.title.id_for_label }}">Choose file...</label>
             {{ form.file }}
+
 			<input type="submit" value="Submit">
 		</form>
 		</section>

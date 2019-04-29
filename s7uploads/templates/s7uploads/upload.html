@@ -44,7 +44,7 @@
 		<section id="thumbnailscreenshots">
 			{% for screenshot in upload.screenshot_set.all %}
 				<section id="thumbnailscreenshot">
-				<img src="{%static screenshot.url %}" alt="{%static screenshot.url %}"></img>
+                    <img src="{% get_media_prefix %}{{screenshot.url}}" alt="{{screenshot.url}}"></img>
 				</section>
 			{% endfor %}
 		</section>

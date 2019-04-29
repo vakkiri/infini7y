@@ -22,5 +22,6 @@ class UploadFileForm(forms.Form):
         versionNotes = forms.CharField()
         versionNumber = forms.DecimalField(max_digits=5, decimal_places=1)
         file = forms.FileField()
+        screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
 

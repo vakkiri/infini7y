@@ -9,7 +9,7 @@ from django.urls import path
 from .models import Upload, Review, S7User
 from .forms import ReviewForm, SignUpForm, UploadFileForm
 
-from .filehandler import handle_uploaded_file, handle_download_file
+from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
 from .authorization import authorize_file_upload
 
 
@@ -27,9 +27,8 @@ def add_review(request, pk):
             url = '/s7uploads/uploads/' + str(pk)
             return HttpResponseRedirect(url)
 
-        else:
-            form = ReviewForm()
-
+    else:
+        form = ReviewForm()
         return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
 
 
@@ -86,7 +85,13 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid() and authorize_file_upload(request):
-            handle_uploaded_file(form, request.FILES['file'], request.user)
+            # upload file
+            upload = handle_uploaded_file(form, request.FILES['file'], request.user)
+
+            # upload screenshots
+            for s in request.FILES.getlist('screenshots'):
+                handle_uploaded_screenshot(form, s, upload)
+
             return redirect('s7uploads:index')
         # TODO: else tell the user to log in
     else:

@@ -56,7 +56,7 @@
 		<li>
 		{% if upload.screenshot_set.exists %}
 		<section id="imgcrop">
-		<img src="{%static upload.indexScreenshot %}" alt="Upload Screenshot" id="middle"></img>
+            <img src="{% get_media_prefix %}{{upload.indexScreenshot}}" alt="{% get_media_prefix %}{{upload.indexScreenshot}}" id="middle"></img>
 		</section>
 		{% endif %}
 		
