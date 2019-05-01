@@ -1,10 +1,11 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.db.models import Count
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
-from django.views import generic
 from django.utils import timezone
 from django.urls import path
+from django.views import generic
 
 from .models import Upload, Review, S7User
 from .forms import ReviewForm, SignUpForm, UploadFileForm
@@ -107,8 +108,15 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         numUploads = 10
-        #return 10 most recent uploads
-        return Upload.objects.filter(uploadDate__lte=timezone.now()).order_by('-uploadDate')[:numUploads]
+        #return 10 sorted uploads
+        order_by = self.request.GET.get('order_by')
+        order_by = '-uploadDate' if order_by is None else order_by
+        uploads = Upload.objects.filter(uploadDate__lte=timezone.now())
+
+        if (order_by == 'ratings'):
+            return sorted(uploads, key=lambda u: -u.avg_review())[:numUploads]
+        else:
+            return uploads.order_by(order_by)[:numUploads]
 
     def get_context_data(self, **kwargs):
         c = super(generic.ListView, self).get_context_data(**kwargs)

@@ -1,4 +1,5 @@
 import datetime
+from django.db.models import Count, Sum
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
@@ -40,6 +41,10 @@ class Upload(models.Model):
 
     def indexScreenshot(self):
         return Screenshot.objects.filter(upload=self)[0].url
+
+
+    def avg_review(self):
+        return Review.objects.filter(upload=self).aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
 
     def __str__(self):
