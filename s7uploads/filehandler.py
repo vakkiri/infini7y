@@ -3,27 +3,31 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.utils import timezone
 from .models import Upload, User, S7User, Screenshot
-
+from .taghandler import add_tag
 
 def add_upload_to_db(form, filepath, user):
     upload = Upload(
-                url = filepath,
-                user = S7User.objects.get(user=User.objects.get(id=user.id)),
-                title = form.cleaned_data['title'],
-                description = form.cleaned_data['description'],
-                versionNotes = form.cleaned_data['versionNotes'],
-                # todo: unittest this, make sure upload time is always correct
-                uploadDate = timezone.now(),
-                versionNumber = form.cleaned_data['versionNumber'],
-                tagline = ""
+                url=filepath,
+                user=S7User.objects.get(user=User.objects.get(id=user.id)),
+                title=form.cleaned_data['title'],
+                description=form.cleaned_data['description'],
+                versionNotes=form.cleaned_data['versionNotes'],
+                # TODO: unittest this, make sure upload time is always correct
+                uploadDate=timezone.now(),
+                versionNumber=form.cleaned_data['versionNumber'],
+                total_downloads=0,
+                version_downloads=0
             )
 
     upload.save()
+
+    # add tags
+    add_tag(str(form.cleaned_data['tagline']), upload)
+
     return upload
 
 
 def add_screenshot_to_db(form, filepath, upload):
-    print('filepath: ', filepath)
     screenshot = Screenshot(
                 url = filepath,
                 upload = upload

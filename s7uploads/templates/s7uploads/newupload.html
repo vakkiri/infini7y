@@ -44,12 +44,16 @@
             <br>
             <label for="{{ form.title.id_for_label }}">Version Notes</label>
             {{ form.versionNotes.as_textarea }}
-            <br>
+            <br><br>
             <label for="{{ form.title.id_for_label }}">Upload Screenshots...</label>
             {{ form.screenshots }}
             <br>
             <label for="{{ form.title.id_for_label }}">Choose file...</label>
             {{ form.file }}
+            <br><br>
+            <label for="{{ form.title.id_for_label }}">Tags (#tag1 #tag2 ...)</label>
+            {{ form.tagline }}
+
 
 			<input type="submit" value="Submit">
 		</form>

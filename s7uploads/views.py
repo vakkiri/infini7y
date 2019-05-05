@@ -78,6 +78,10 @@ def signup(request):
 
 def download_file(request, pk):
     upload = Upload.objects.get(pk=pk)
+    upload.version_downloads += 1
+    upload.total_downloads += 1
+    upload.save(update_fields=['version_downloads', 'total_downloads'])
+    print(upload.total_downloads)
     return handle_download_file(upload.url)
 
 def upload_file(request):

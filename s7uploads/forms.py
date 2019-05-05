@@ -11,10 +11,12 @@ class SignUpForm(UserCreationForm):
 		model = User
 		fields = ('username', 'email', 'password1', 'password2', )
 
+
 class ReviewForm(forms.ModelForm):
 	class Meta:
 		model = Review
 		fields = ('title', 'text', 'rating')
+
 
 class UploadFileForm(forms.Form):
         title = forms.CharField(max_length=50)
@@ -23,5 +25,6 @@ class UploadFileForm(forms.Form):
         versionNumber = forms.DecimalField(max_digits=5, decimal_places=1)
         file = forms.FileField()
         screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+        tagline = forms.CharField(required=False)
 
 

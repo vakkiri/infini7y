@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.db import models
+from django.db.models.signals import post_save
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.utils.text import slugify
 
 
 class S7User(models.Model):
@@ -36,7 +37,8 @@ class Upload(models.Model):
     versionNotes = models.TextField(verbose_name="Version Notes")
     uploadDate = models.DateTimeField('date published')
     versionNumber = models.DecimalField(max_digits=5, decimal_places = 1)
-    tagline = models.TextField()
+    total_downloads = models.IntegerField()
+    version_downloads = models.IntegerField()
 
 
     def indexScreenshot(self):
@@ -44,11 +46,23 @@ class Upload(models.Model):
 
 
     def avg_review(self):
-        return Review.objects.filter(upload=self).aggregate(Sum('rating'))['rating__sum'] / reviews.count()
-
+        reviews = Review.objects.filter(upload=self)
+        return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
     def __str__(self):
         return self.title
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+
+    uploads = models.ManyToManyField(Upload)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        print("slug: ", self.slug)
+        super(Tag, self).save(*args, **kwargs)
 
 
 class Screenshot(models.Model):
