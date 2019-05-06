@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.urls import path
 from django.views import generic
 
-from .models import Upload, Review, S7User
-from .forms import ReviewForm, SignUpForm, UploadFileForm
+from .models import Upload, Review, S7User, Tag
+from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm
 
 from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
 from .authorization import authorize_file_upload
@@ -84,6 +84,7 @@ def download_file(request, pk):
     print(upload.total_downloads)
     return handle_download_file(upload.url)
 
+
 def upload_file(request):
 
     if request.method == 'POST':
@@ -110,26 +111,42 @@ class IndexView(generic.ListView):
     template_name = 's7uploads/index.html'
     context_object_name = 'latest_upload_list'
 
+
     def get_queryset(self):
-        numUploads = 10
-        #return 10 sorted uploads
-        order_by = self.request.GET.get('order_by')
-        order_by = '-uploadDate' if order_by is None else order_by
+        num_uploads = 10
         uploads = Upload.objects.filter(uploadDate__lte=timezone.now())
 
+        order_by = self.request.GET.get('order_by')
+        order_by = '-uploadDate' if order_by is None else order_by
+
+        target_slug = self.request.GET.get('filter')
+        filter_tag = Tag.objects.filter(slug=target_slug).first()
+       
+        # check if we are trying to filter by a tag which does not exist
+        if target_slug is not None and filter_tag is None:
+            return None
+
+        elif target_slug is not None and filter_tag is not None:
+            uploads = uploads.filter(tags__id=filter_tag.id)
+
         if (order_by == 'ratings'):
-            return sorted(uploads, key=lambda u: -u.avg_review())[:numUploads]
+            return sorted(uploads, key=lambda u: -u.avg_review())[:num_uploads]
         else:
-            return uploads.order_by(order_by)[:numUploads]
+            return uploads.order_by(order_by)[:num_uploads]
+
 
     def get_context_data(self, **kwargs):
         c = super(generic.ListView, self).get_context_data(**kwargs)
         user = self.request.user
+
         if not user.is_anonymous:
             s7user = S7User.objects.filter(user=user)[:1]
             if s7user:
                 c['s7user'] = s7user.get()
+
+        c['search_form'] = SearchForm()
         return c
+
 
 class ReviewView(generic.ListView):
     model = Review

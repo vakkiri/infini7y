@@ -47,7 +47,11 @@ class Upload(models.Model):
 
     def avg_review(self):
         reviews = Review.objects.filter(upload=self)
-        return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
+        num_reviews = reviews.count()
+        if num_reviews == 0:
+            return 0
+        else:
+            return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
     def __str__(self):
         return self.title
@@ -57,7 +61,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
 
-    uploads = models.ManyToManyField(Upload)
+    uploads = models.ManyToManyField(Upload, related_name='tags')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
