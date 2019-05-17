@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -10,8 +10,26 @@ from django.views import generic
 from .models import Upload, Review, S7User, Tag
 from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm
 
-from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
 from .authorization import authorize_file_upload
+from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
+from .urltools import condense_url_get, strip_get_tags
+
+
+def search_uploads(request, params=''):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            params = strip_get_tags(params)
+            get_line = '?tags=' + str(form.cleaned_data.get('search_line'))
+            get_line = get_line + '&' + params if len(params) > 0 else get_line
+            url = '/s7uploads/' + get_line
+            return HttpResponseRedirect(url)
+
+    else:
+        form = SearchForm()
+        url = '/s7uploads/' + params
+        return HttpResponseRedirect(url)
 
 
 def add_review(request, pk):
@@ -116,18 +134,22 @@ class IndexView(generic.ListView):
         num_uploads = 10
         uploads = Upload.objects.filter(uploadDate__lte=timezone.now())
 
-        order_by = self.request.GET.get('order_by')
+        order_by, filter_slugs, search_by, _ = condense_url_get(self.request.GET)
+
         order_by = '-uploadDate' if order_by is None else order_by
 
-        target_slug = self.request.GET.get('filter')
-        filter_tag = Tag.objects.filter(slug=target_slug).first()
-       
-        # check if we are trying to filter by a tag which does not exist
-        if target_slug is not None and filter_tag is None:
+        filter_tags = [Tag.objects.filter(slug=slug).first() for slug in filter_slugs]
+        filter_tags = [tag for tag in filter_tags if tag is not None]
+
+        # check if none of the tags we are filtering by have items
+        if len(filter_slugs) > 0 and len(filter_tags) == 0:
             return None
 
-        elif target_slug is not None and filter_tag is not None:
-            uploads = uploads.filter(tags__id=filter_tag.id)
+        elif len(filter_slugs) > 0 and len(filter_tags) > 0:
+            tag_ids = [tag.id for tag in filter_tags]
+            uploads = uploads.filter(tags__id__in=tag_ids).distinct()
+
+        # TODO: filter by search_by
 
         if (order_by == 'ratings'):
             return sorted(uploads, key=lambda u: -u.avg_review())[:num_uploads]
@@ -145,6 +167,7 @@ class IndexView(generic.ListView):
                 c['s7user'] = s7user.get()
 
         c['search_form'] = SearchForm()
+
         return c
 
 
@@ -165,6 +188,7 @@ class ReviewView(generic.ListView):
             if s7user:
                 c['s7user'] = s7user.get()
         return c
+
 
 class UserListView(generic.ListView):
     model = S7User

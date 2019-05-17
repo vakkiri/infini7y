@@ -27,7 +27,7 @@
 <section id="sidebar">
 	<section id="sidebar-content">
 	<h2>Search:</h2>
-    <form method="post">
+    <form action="search_uploads/{{ request.GET.urlencode }}" method="post">
         {% csrf_token %}
         {% for field in search_form %}
         {{ field }}
@@ -35,18 +35,18 @@
     </form>
 	<h2>Sort by:</h2>
 	<ul>
-		<li> <a href="?order_by=-uploadDate">Newest</a></li>
-		<li> <a href="?order_by=uploadDate">Oldest</a></li>
-		<li> <a href="?order_by=ratings">Ratings</a></li>
-        <li> <a href="?order_by=-total_downloads">Downloads</a></li>
+        <li> <a href="?{{ request.GET.urlencode }}&order_by=-uploadDate">Newest</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&order_by=uploadDate">Oldest</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&order_by=ratings">Ratings</a></li>
+        <li> <a href="?{{ request.GET.urlencode }}&order_by=-total_downloads">Downloads</a></li>
 	</ul>
     <h2>Filter by:</h2>
 	<ul>
-		<li> <a href="?filter=map">Maps</a></li>
-        <li> <a href="?filter=scenario">Scenarios</a></li>
-		<li> <a href="?filter=plugin#script">Plugins + Scripts</a></li>
-		<li> <a href="?filter=utility">Utilities</a></li>
-		<li> <a href="?filter=physics">Physics</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&filter=map">Maps</a></li>
+        <li> <a href="?{{ request.GET.urlencode }}&filter=scenario">Scenarios</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&filter=plugin#script">Plugins + Scripts</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&filter=utility">Utilities</a></li>
+		<li> <a href="?{{ request.GET.urlencode }}&filter=physics">Physics</a></li>
 	</ul>
     <br>
 
