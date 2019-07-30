@@ -1,12 +1,16 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = 's7uploads'
 
 urlpatterns = [
-	path('', views.IndexView.as_view(), name='index'),
+	re_path(r'^$', views.IndexView.as_view(), name='index'),
+        path('<int:page>/', views.IndexView.as_view(), name='index'),
+        path('search_uploads/', views.search_uploads, name='search_uploads'),
+        path('<int:page>/search_uploads/', views.search_uploads, name='search_uploads'),
+        path('search_uploads/<str:params>', views.search_uploads, name='search_uploads'),
 	path('signup/', views.signup, name='signup'),
 	path('login/', views.user_login, name='login'),
 	path('logout/', views.logout_view, name='logout'),

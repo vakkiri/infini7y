@@ -1,6 +1,7 @@
 {% extends "s7uploads/navbar.html" %}
 
 {% load static %}
+{% load url_tags %}
 
 {% block content %}
 
@@ -27,20 +28,26 @@
 <section id="sidebar">
 	<section id="sidebar-content">
 	<h2>Search:</h2>
+    <form action="search_uploads/?{{ request.GET.urlencode }}" method="post">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{ field }}
+        {% endfor %}
+    </form>
 	<h2>Sort by:</h2>
 	<ul>
-		<li> <a href="#">Ratings</a></li>
-		<li> <a href="#">Downloads</a></li>
-
-	</ul>
+		<li> <a href="?{% update_query request order_by='-uploadDate' %}">Newest</a></li>
+		<li> <a href="?{% update_query request order_by='uploadDate' %}">Oldest</a></li>
+		<li> <a href="?{% update_query request order_by='ratings' %}">Best Rated</a></li>
     <h2>Filter by:</h2>
 	<ul>
-		<li> <a href="#">Maps</a></li>
-		<li> <a href="#">Scenarios</a></li>
-		<li> <a href="#">Plugins + Scripts</a></li>
-		<li> <a href="#">Utilities</a></li>
-		<li> <a href="#">Physics</a></li>
+		<li> <a href="?{% toggle_query request filter='map' %}">Maps</a></li>
+		<li> <a href="?{% toggle_query request filter='scenario' %}">Scenarios</a></li>
+		<li> <a href="?{% toggle_query request filter='plugin#script' %}">Plugins + Scripts</a></li>
+		<li> <a href="?{% toggle_query request filter='utility' %}">Utilities</a></li>
+		<li> <a href="?{% toggle_query request filter='physics' %}">Physics</a></li>
 	</ul>
+    <br>
 
 	</section>
 </section>
@@ -78,6 +85,10 @@
 	<p> Nothing to see here. </p>
 
 {% endif %}
+
+{% for page in num_pages %}
+	<a href="{% url 's7uploads:index' page %}?{{request.GET.urlencode}}">{{page}}</a>
+{% endfor %}
 
 </section>
 </section>
