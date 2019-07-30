@@ -1,3 +1,5 @@
+import math
+
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -12,10 +14,10 @@ from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm
 
 from .authorization import authorize_file_upload
 from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
-from .urltools import condense_url_get, strip_get_tags
+from .urltools import strip_get_tags
 
 
-def search_uploads(request, params=''):
+def search_uploads(request, params='', page=0):
     if request.method == 'POST':
         form = SearchForm(request.POST)
 
@@ -128,34 +130,61 @@ class IndexView(generic.ListView):
     model = Upload
     template_name = 's7uploads/index.html'
     context_object_name = 'latest_upload_list'
+    total_num_uploads = 0
+    uploads_per_page = 2
+
+
+    def get_uploads_in_range(self, uploads):
+        # the -1 is due to displaying start page as 1 instead of 0 in browser
+        start_page = self.kwargs['page'] - 1 if 'page' in self.kwargs else 0
+        print("page ", start_page)
+        start_index = start_page * self.uploads_per_page
+        print("start index: ", start_index)
+        end_index = start_index + self.uploads_per_page
+        print("end index: ", end_index)
+        return uploads[start_index:end_index]
 
 
     def get_queryset(self):
-        num_uploads = 10
         uploads = Upload.objects.filter(uploadDate__lte=timezone.now())
+        get = self.request.GET
 
-        order_by, filter_slugs, search_by, _ = condense_url_get(self.request.GET)
+        order_by = get.get('order_by')
+        filter_slug = get.get('filter')
+        tags = get.get('tags')
 
         order_by = '-uploadDate' if order_by is None else order_by
 
-        filter_tags = [Tag.objects.filter(slug=slug).first() for slug in filter_slugs]
-        filter_tags = [tag for tag in filter_tags if tag is not None]
+        filter_tag = Tag.objects.filter(slug=filter_slug).first()
 
-        # check if none of the tags we are filtering by have items
-        if len(filter_slugs) > 0 and len(filter_tags) == 0:
+        # Return None if there are no items with the specified tags
+        if filter_slug is not None and filter_tag is None:
+            self.total_num_uploads = 0
             return None
 
-        elif len(filter_slugs) > 0 and len(filter_tags) > 0:
-            tag_ids = [tag.id for tag in filter_tags]
-            uploads = uploads.filter(tags__id__in=tag_ids).distinct()
-
-        # TODO: filter by search_by
+        elif filter_slug is not None and filter_tag is not None:
+            tag_id = filter_tag.id
+            uploads = uploads.filter(tags__id=tag_id).distinct()
 
         if (order_by == 'ratings'):
-            return sorted(uploads, key=lambda u: -u.avg_review())[:num_uploads]
+            uploads = sorted(uploads, key=lambda u: -u.avg_review())
         else:
-            return uploads.order_by(order_by)[:num_uploads]
+            uploads =  uploads.order_by(order_by)
 
+        # Filter based on tags
+        if tags is not None:
+            print("tags: ", tags)
+
+        self.total_num_uploads = len(uploads)
+        return self.get_uploads_in_range(uploads)
+
+
+    def get_page_list(self):
+        num_pages = math.ceil(self.total_num_uploads / self.uploads_per_page)
+        page_list = ''
+        for i in range(num_pages):
+            page_list = page_list + str(i + 1)
+        return page_list
 
     def get_context_data(self, **kwargs):
         c = super(generic.ListView, self).get_context_data(**kwargs)
@@ -167,6 +196,7 @@ class IndexView(generic.ListView):
                 c['s7user'] = s7user.get()
 
         c['search_form'] = SearchForm()
+        c['num_pages'] = self.get_page_list()
 
         return c
 

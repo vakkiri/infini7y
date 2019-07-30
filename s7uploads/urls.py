@@ -7,7 +7,9 @@ app_name = 's7uploads'
 
 urlpatterns = [
 	re_path(r'^$', views.IndexView.as_view(), name='index'),
+        path('<int:page>/', views.IndexView.as_view(), name='index'),
         path('search_uploads/', views.search_uploads, name='search_uploads'),
+        path('<int:page>/search_uploads/', views.search_uploads, name='search_uploads'),
         path('search_uploads/<str:params>', views.search_uploads, name='search_uploads'),
 	path('signup/', views.signup, name='signup'),
 	path('login/', views.user_login, name='login'),

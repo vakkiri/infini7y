@@ -35,19 +35,21 @@
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
             <label for="{{ form.title.id_for_label }}">Title</label>
-			{{ form.title }}
+			{{ form.title }}		
+	    <br>
+	    <br>
             <label for="{{ form.title.id_for_label }}">Version Number</label>
             {{ form.versionNumber }}
-            <br>
+            <br><br>
             <label for="{{ form.title.id_for_label }}">Description</label>
             {{ form.description.as_textarea }}
-            <br>
+	    <br><br>
             <label for="{{ form.title.id_for_label }}">Version Notes</label>
             {{ form.versionNotes.as_textarea }}
             <br><br>
             <label for="{{ form.title.id_for_label }}">Upload Screenshots...</label>
             {{ form.screenshots }}
-            <br>
+	    <br><br>
             <label for="{{ form.title.id_for_label }}">Choose file...</label>
             {{ form.file }}
             <br><br>
