@@ -10,10 +10,10 @@ from django.urls import path
 from django.views import generic
 
 from .models import Upload, Review, S7User, Tag
-from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm
+from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm, EditUploadForm
 
 from .authorization import authorize_file_upload
-from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file
+from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file, handle_edit_upload
 from .urltools import strip_get_tags
 
 
@@ -53,6 +53,18 @@ def add_review(request, pk):
         return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
 
 
+def delete_upload(request, pk):
+    user = request.user
+    upload = Upload.objects.get(pk=pk)
+
+    if not user.is_anonymous and upload is not None and upload.user.user.id == user.id:
+        upload.delete()
+    else:
+        print("Unauthorized attempt to delete upload.")
+
+    return redirect('s7uploads:index')
+
+
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -90,10 +102,10 @@ def signup(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('s7uploads:index')
-        else:
-            form = SignUpForm()
+    else:
+        form = SignUpForm()
 
-        return render(request, 's7uploads/signup.html', {'form' : form})
+    return render(request, 's7uploads/signup.html', {'form' : form})
 
 
 def download_file(request, pk):
@@ -131,7 +143,7 @@ class IndexView(generic.ListView):
     template_name = 's7uploads/index.html'
     context_object_name = 'latest_upload_list'
     total_num_uploads = 0
-    uploads_per_page = 2
+    uploads_per_page = 7
 
 
     def get_uploads_in_range(self, uploads):
@@ -150,21 +162,21 @@ class IndexView(generic.ListView):
         get = self.request.GET
 
         order_by = get.get('order_by')
-        filter_slug = get.get('filter')
-        tags = get.get('tags')
+        filter_tag = get.get('filter')
+        search_tag = get.get('tags')
 
         order_by = '-uploadDate' if order_by is None else order_by
 
-        filter_tag = Tag.objects.filter(slug=filter_slug).first()
 
-        # Return None if there are no items with the specified tags
-        if filter_slug is not None and filter_tag is None:
-            self.total_num_uploads = 0
-            return None
-
-        elif filter_slug is not None and filter_tag is not None:
-            tag_id = filter_tag.id
-            uploads = uploads.filter(tags__id=tag_id).distinct()
+        # filter based on selected filters
+        if filter_tag is not None:
+            filter_tag = Tag.objects.filter(slug=filter_tag).first()
+            if filter_tag is not None:
+                tag_id = filter_tag.id
+                uploads = uploads.filter(tags__id=tag_id).distinct()
+            else:
+                self.total_num_uploads = 0
+                return None
 
         if (order_by == 'ratings'):
             uploads = sorted(uploads, key=lambda u: -u.avg_review())
@@ -172,8 +184,32 @@ class IndexView(generic.ListView):
             uploads =  uploads.order_by(order_by)
 
         # Filter based on tags
-        if tags is not None:
-            print("tags: ", tags)
+        if search_tag is not None:
+            print("tags: ", search_tag)
+            search_user = S7User.objects.filter(user__username=search_tag).first()
+            search_tag = Tag.objects.filter(slug=search_tag).first()
+
+            tag_matches = None
+            user_matches = None
+
+            if search_tag is not None:
+                tag_id = search_tag.id
+                tag_matches = uploads.filter(tags__id=tag_id).distinct()
+            if search_user is not None:
+                user_id = search_user.id
+                if order_by == 'ratings':
+                    user_matches = [upload for upload in uploads if upload.user.id == user_id]
+                else:
+                    user_matches = uploads.filter(user__id=user_id).distinct()
+
+            if tag_matches is not None and user_matches is not None:
+                uploads = tag_matches | user_matches
+            elif tag_matches is not None:
+                uploads = tag_matches
+            elif user_matches is not None:
+                uploads = user_matches
+            else:
+                uploads = []
 
         self.total_num_uploads = len(uploads)
         return self.get_uploads_in_range(uploads)
@@ -239,6 +275,60 @@ class UserListView(generic.ListView):
 
         return c
 
+
+class EditUploadView(generic.DetailView):
+    model = Upload
+    template_name = 's7uploads/editupload.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+            # TODO: redirect to forbidden page instead of index
+            if not self.request.user.is_authenticated or self.object.user.user.id != self.request.user.id:
+                return redirect('s7uploads:index')
+        except:
+            return redirect('s7uploads:index')
+
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.id == self.get_object().user.user.id:
+            form = EditUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                handle_edit_upload(form, self.get_object())
+                return redirect('s7uploads:upload', pk=self.get_object().id)
+            else:
+                # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+                return redirect('s7uploads:index')
+        else:
+            return redirect('s7uploads:index')
+
+
+    def get_queryset(self):
+        return Upload.objects.filter(uploadDate__lte=timezone.now())
+
+    def get_context_data(self, **kwargs):
+        c = super(generic.DetailView, self).get_context_data(**kwargs)
+        user = self.request.user
+
+        if not user.is_anonymous:
+            s7user = S7User.objects.filter(user=user)[:1]
+            if s7user:
+                c['s7user'] = s7user.get()
+
+        # set initial values of the form to the object values
+        initials = {}
+        initials['title'] = self.object.title
+        initials['description'] = self.object.description
+        initials['versionNotes'] = self.object.versionNotes
+        initials['versionNumber'] = self.object.versionNumber
+       
+        # TODO: populate initials with existing tags
+
+        form = EditUploadForm(initial=initials)
+        c['form'] = form
+        return c
 
 class UploadView(generic.DetailView):
     model = Upload
