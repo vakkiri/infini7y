@@ -79,11 +79,23 @@ def handle_uploaded_screenshot(form, f, upload):
 
 def handle_download_file(file_path):
     if os.path.exists(file_path):
-        print(file_path)
         with open(file_path, 'rb') as f:
             response = HttpResponse(f.read(), content_type="application/zip")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
+    else:
+        print("File does not exist! ", file_path)
 
+    # todo: instead of 404 we should let the user now the file couldn't be found and redirect to index
     raise Http404
+
+
+def handle_edit_upload(form, upload):
+    print("editing upload ", upload.title)
+    data = form.cleaned_data
+    tagline = data.pop('tagline')
+    Upload.objects.filter(pk=upload.id).update(**data)
+
+    if len(tagline) > 0:
+        add_tag(str(tagline), upload)
 

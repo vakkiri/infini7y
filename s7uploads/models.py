@@ -53,6 +53,16 @@ class Upload(models.Model):
         else:
             return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
+
+    def total_stars(self):
+        reviews = Review.objects.filter(upload=self)
+        num_reviews = reviews.count()
+        if num_reviews == 0:
+            return 0
+        else:
+            return reviews.aggregate(Sum('rating'))['rating__sum']
+
+
     def __str__(self):
         return self.title
 

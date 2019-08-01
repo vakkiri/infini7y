@@ -5,7 +5,7 @@
 }
 
 div#stripe {
-	background-color: rgb(170, 120, 170);
+	background-color: rgb(120, 170, 170);
 	height: 2px;
 	width: 100%;
 	position: fixed;
@@ -69,7 +69,7 @@ div#graystripe {
 
 #sideupload a {
 	color: rgb(250, 250, 255);
-	background-color: rgb(170, 120, 170);
+	background-color: rgb(120, 170, 170);
 	text-decoration: none;
 	text-align: center;
 	font-size: 14px;
@@ -288,12 +288,35 @@ div#banner {
 
 #download {
 	float: right;
-	color: rgb(250, 250, 255);
-	background-color: rgb(170, 120, 170);
+	color: rgb(255, 255, 255);
+	background-color: rgb(120, 170, 170);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 4px;
 	padding: 4px;
+	margin-left: 4px;
+}
+
+#editupload {
+	float: right;
+	color: rgb(255, 255, 255);
+	background-color: rgb(120, 170, 170);
+	text-decoration: none;
+	font-size: 16px;
+	border-radius: 4px;
+	padding: 4px;
+	margin-left: 4px;
+}
+
+#delete {
+	float: right;
+	color: rgb(255, 255, 255);
+	background-color: rgb(200, 20, 50);
+	text-decoration: none;
+	font-size: 16px;
+	border-radius: 4px;
+	padding: 4px;
+	margin-left: 4px;
 }
 
 #upload h3 {
@@ -339,7 +362,7 @@ div#banner {
 	text-decoration: none;
 	color: rgb(255, 250, 255);
 	border-style: solid;
-	border-color: rgb(170, 120, 170);
+	border-color: rgb(120, 170, 170);
 	border-radius: 8px;
 	padding: 4px;
 	border-width: 1px;
@@ -380,8 +403,23 @@ div#banner {
     display: block;
 }
 
+#pagenums {
+	padding: 4px;
+}
+
+#pagenums a {
+	padding: 2px;
+	margin-right: 4px;
+	text-decoration: none;
+	font-size: 18px;
+	color: rgb(255, 255, 255);
+	background-color: rgb(120, 170, 170);
+	border: 1px solid;
+	border-color: rgb(15, 5, 10);
+}
+
 .sitecolor {
-	color: rgb(170, 120, 170);
+	color: rgb(120, 170, 170);
 }
 
 

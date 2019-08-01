@@ -26,13 +26,51 @@
 {% endif %}
 
 <section id="singleupload">
+{% if user|user_owns_upload:upload.user %}
+<section id="upload">
+	<section id="uploadheader">
+		<form enctype="multipart/form-data" method="post">
+			{% csrf_token %}
+
+		<a id="download" href="#">Download</a>
+		<a id="delete" href="#">Delete</a>
+		<h1>{{form.title}} by {{ upload.user.user.username }}</h1>
+
+		<div id="blackstripe"></div>
+
+		<section id="uploadtext">
+			<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
+			{{ form.description.as_textarea }}
+			<h4> Version {{ form.versionNumber }} Notes: </h4>
+			<p> {{ form.versionNotes.as_textarea }} </p>
+
+			{{ form.tagline }}
+			<br>
+
+			<input type="submit" value="Submit Changes">
+			</form>
+			<br><br>
+			<h4> Upload Statistics: </h4>
+		</section>
+
+
+		<section id="thumbnailscreenshots">
+			{% for screenshot in upload.screenshot_set.all %}
+				<section id="thumbnailscreenshot">
+                    <img src="{% get_media_prefix %}{{screenshot.url}}" alt="{{screenshot.url}}"></img>
+				</section>
+			{% endfor %}
+		</section>
+
+
+	</section>
+</section>
+
+{% else %}
+
 <section id="upload">
 	<section id="uploadheader">
 		<a id="download" href="#">Download</a>
-		{% if user|user_owns_upload:upload.user %}
-		<a id="editupload" href="{% url 's7uploads:edit' upload.id %}">Edit</a>
-		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
-		{% endif %}
 		<h1>{{ upload.title }} by {{ upload.user.user.username }}</h1>
 
 		<div id="blackstripe"></div>
@@ -42,17 +80,7 @@
 			<p>{{ upload.description|linebreaks }}</p>
 			<h4> Version {{upload.versionNumber}} Notes: </h4>
 			<p> {{ upload.versionNotes|linebreaks }} </p>
-			<h4> Upload Statistics: </h4><br>
-			<p>
-			downloads: {{upload.total_downloads}} <br>
-			stars: {{upload.total_stars}} <br>
-			</p>
-			<p>
-			{% for tag in upload.tags.all %}
-			#{{tag.name}} 
-			{% endfor %}
-			</p>
-
+			<h4> Upload Statistics: </h4>
 		</section>
 
 		<section id="thumbnailscreenshots">
@@ -76,9 +104,7 @@
 					<input type="submit" value="Submit">
 				</form>
 			{% else %}
-				{% if not user|user_owns_upload:upload.user %}
 				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
-				{% endif %}
 			<br>
 			<br>
 			{% endif %}
@@ -111,6 +137,7 @@
 		</section>
 	{% endif %}
 </section>
+{% endif %}
 
 </section>
 
