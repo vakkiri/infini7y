@@ -15,7 +15,7 @@
 		{% else %}
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
 			<section id="userbannertext">
-				<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
+			<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
 			<h5>{{ s7user.num_uploads }} uploads</h5>
 			<h5>{{ s7user.num_reviews }} reviews</h5>
 			<section id="sideupload">

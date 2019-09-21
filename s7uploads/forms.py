@@ -40,3 +40,7 @@ class EditUploadForm(forms.Form):
     tagline = forms.CharField(required=False)
 
 
+class AddScreenshotForm(forms.Form):
+    screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+

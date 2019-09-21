@@ -13,7 +13,7 @@
 		{% else %}
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
 			<section id="userbannertext">
-				<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
+			<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
 			<h5>{{ s7user.num_uploads }} uploads</h5>
 			<h5>{{ s7user.num_reviews }} reviews</h5>
 			<section id="sideupload">
@@ -27,28 +27,23 @@
 
 <section id="upload">
 
-{% if user_list %}
-	<h1>Users</h1>
+<section id="community">
+<h1>Community</h1>
+	<p>
+	Have a question for the forums? Looking to chat with other Marathonners on Discord? Check out the community links!
+	</p>
+	<br>
 	<div id="blackstripe"></div>
-	<section id="userlist">
+	<br>
 
 	<ul>
-
-	{% for user in user_list %}
-		<li>
-		<a href="{% url 's7uploads:index' %}?tags={{user.user.username}}"> {{ user.user.username }} </a>
-		<h1>{{ user.num_uploads }} uploads, {{ user.num_reviews }} reviews</h1>
-		</li>
-	{% endfor %}
-
+		<li><a href="http://discord.gg/XnEqb8z">Discord</p></li>
+		<li><a href="http://reddit.com/r/Marathon">Reddit</p></li>
+		<li><a href="http://pfhorums.com">The Pfhorums</p></li>
+		<li><a href="http://marathon.bungie.org/story">Marathon's Story</p></li>
+		<li><a href="http://lhowon.org">lhowon.org</p></li>
 	</ul>
-
-	</section>
-{% else %}
-
-	<p> Nothing to see here. </p>
-
-{% endif %}
+</section>
 
 </section>
 </section>

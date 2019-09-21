@@ -13,7 +13,7 @@
 		{% else %}
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
 			<section id="userbannertext">
-			<h3>{{ user.username }}</h3>
+			<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
 			<h5>{{ s7user.num_uploads }} uploads</h5>
 			<h5>{{ s7user.num_reviews }} reviews</h5>
 			<section id="sideupload">
@@ -24,34 +24,16 @@
 	</section>
 {% endif %}
 
-<section id="sidebar">
-	<h1>Search / Sort</h1>
-	<section id="sidebar-content">
-	<h2>Search for:</h2>
-	<ul>
-		<li> <a href="#">Maps</a></li>
-		<li> <a href="#">Scenarios</a></li>
-		<li> <a href="#">Plugins + Scripts</a></li>
-		<li> <a href="#">Utilities</a></li>
-		<li> <a href="#">Physics</a></li>
-	</ul>
-	<h2>Search by:</h2>
-	<ul>
-		<li> <a href="#">Ratings</a></li>
-		<li> <a href="#">Downloads</a></li>
-	</ul>
-	</section>
-</section>
-
 <section id="upload">
 
 {% if latest_review_list %}
 	<h1>Latest Reviews</h1>
+	<div id="blackstripe"></div>
 	<section id="review">
 		<ul>
 		{% for review in latest_review_list %}
 			<li>
-			<h2 class="review">{{ review.title }}</h2>
+				<h2 class="review">{{ review.title }} (<a href="{% url 's7uploads:upload' pk=review.upload.id %}">{{review.upload.title}}</a>)</h2>
 			<h3 id="review-rating">{{review.rating}}/5</h3>
 			<h3>By {{ review.user.user.username }} on {{ review.pubDate }}</h3>
 			<p>{{review.text|linebreaks}}</p>

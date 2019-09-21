@@ -14,7 +14,7 @@
 		{% else %}
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
 			<section id="userbannertext">
-			<h3>{{ user.username }}</h3>
+				<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
 			<h5>{{ s7user.num_uploads }} uploads</h5>
 			<h5>{{ s7user.num_reviews }} reviews</h5>
 			<section id="sideupload">
@@ -76,7 +76,7 @@
 					<input type="submit" value="Submit">
 				</form>
 			{% else %}
-				{% if not user|user_owns_upload:upload.user %}
+				{% if not user|user_owns_upload:upload.user and not user.is_anonymous %}
 				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
 				{% endif %}
 			<br>
