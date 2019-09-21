@@ -12,10 +12,13 @@
 	<ul id="navlinks">
 	<li ><a href="{%url 's7uploads:index' %}" class="lightlink">infini<span class="sitecolor">7</span>y</a></li>
 	<li ><a href="{%url 's7uploads:index' %}" class="lightlink">Downloads</a></li>
+	{% if user and not user.is_anonymous %}
+	<li><a href="{% url 's7uploads:index' %}?tags={{user.username}}" class="lightlink">Uploads</a></li>
+	{% endif %}
 	<li><a href="{%url 's7uploads:reviews' %}" class="lightlink">Reviews</a></li>
 	<li><a href="{%url 's7uploads:users' %}" class="lightlink">Users</a></li>
-	<li><a href="#" class="lightlink" >About</a></li>
-	<li><a href="#" class="lightlink">Community</a></li>
+	<li><a href="https://github.com/vakkiri/infini7y" class="lightlink" >Github</a></li>
+	<li><a href="{%url 's7uploads:community' %}" class="lightlink" >Community</a></li>
 	{% if user.is_anonymous %}
 		<li><a href="{%url 's7uploads:signup' %}" class="boldlink">Sign Up</a></li>
 		<li><a href="{%url 's7uploads:login' %}" class="boldlink">Log In</a></li>

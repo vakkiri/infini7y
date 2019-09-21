@@ -35,6 +35,17 @@ def add_screenshot_to_db(form, filepath, upload):
 
     screenshot.save()
 
+
+def valid_upload_ext(filename):
+    extension = filename.split('.')[-1]
+    return extension in ['zip', 'tgz', 'tar', 'gz']
+
+
+def valid_screenshot_ext(filename):
+    extension = filename.split('.')[-1]
+    return extension in ['png', 'jpg', 'jpeg', 'gif', 'bmp']
+
+
 def handle_uploaded_file(form, f, user):
     filepath = settings.MEDIA_ROOT + f.name
     filename = f.name.split('.', 1)
@@ -91,11 +102,11 @@ def handle_download_file(file_path):
 
 
 def handle_edit_upload(form, upload):
-    print("editing upload ", upload.title)
     data = form.cleaned_data
     tagline = data.pop('tagline')
     Upload.objects.filter(pk=upload.id).update(**data)
 
     if len(tagline) > 0:
         add_tag(str(tagline), upload)
+
 

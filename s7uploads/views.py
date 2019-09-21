@@ -9,12 +9,21 @@ from django.utils import timezone
 from django.urls import path
 from django.views import generic
 
-from .models import Upload, Review, S7User, Tag
-from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm, EditUploadForm
+from .models import Upload, Review, S7User, Tag, Screenshot
+from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm, EditUploadForm, AddScreenshotForm
 
 from .authorization import authorize_file_upload
-from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file, handle_edit_upload
+from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file, handle_edit_upload, valid_upload_ext, valid_screenshot_ext
+
 from .urltools import strip_get_tags
+
+
+def about_view(request):
+    return render(request, 's7uploads/about.html')
+
+
+def community_view(request):
+    return render(request, 's7uploads/community.html')
 
 
 def search_uploads(request, params='', page=0):
@@ -35,22 +44,25 @@ def search_uploads(request, params='', page=0):
 
 
 def add_review(request, pk):
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
+    if not request.user.is_anonymous:
+        if request.method == 'POST':
+            form = ReviewForm(request.POST)
 
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.pubDate = timezone.now()
-            review.upload = Upload.objects.get(pk=pk)
-            review.user = S7User.objects.get(pk=1)	# TODO: check that a usr is logged
-            review.save()
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.pubDate = timezone.now()
+                review.upload = Upload.objects.get(pk=pk)
+                review.user = S7User.objects.get(pk=1)
+                review.save()
 
-            url = '/s7uploads/uploads/' + str(pk)
-            return HttpResponseRedirect(url)
+                url = '/s7uploads/uploads/' + str(pk)
+                return HttpResponseRedirect(url)
 
+        else:
+            form = ReviewForm()
+            return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
     else:
-        form = ReviewForm()
-        return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
+        return redirect('s7uploads:signup')
 
 
 def delete_upload(request, pk):
@@ -62,6 +74,19 @@ def delete_upload(request, pk):
     else:
         print("Unauthorized attempt to delete upload.")
 
+    return redirect('s7uploads:index')
+
+
+def delete_screenshot(request, pk):
+    user = request.user
+    ss = Screenshot.objects.get(pk=pk)
+
+    if not user.is_anonymous and ss is not None and ss.upload.user.user.id == user.id:
+        ss.delete()
+    else:
+        print("Unauthorized attempt to delete upload.")
+
+    # TODO: redirect to previously viewed upload
     return redirect('s7uploads:index')
 
 
@@ -122,13 +147,17 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
 
-        if form.is_valid() and authorize_file_upload(request):
+        if form.is_valid() and authorize_file_upload(request) and valid_upload_ext(request.FILES['file'].name):
             # upload file
             upload = handle_uploaded_file(form, request.FILES['file'], request.user)
 
             # upload screenshots
             for s in request.FILES.getlist('screenshots'):
-                handle_uploaded_screenshot(form, s, upload)
+                if valid_screenshot_ext(s.name):
+                    handle_uploaded_screenshot(form, s, upload)
+                else:
+                    # TODO: Let user know the extension was valid
+                    print("Invalid image extension.")
 
             return redirect('s7uploads:index')
         # TODO: else tell the user to log in
@@ -292,15 +321,41 @@ class EditUploadView(generic.DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
+
+    def handle_edit_form(self, request):
+        form = EditUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_edit_upload(form, self.get_object())
+            return redirect('s7uploads:upload', pk=self.get_object().id)
+        else:
+            # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+            return redirect('s7uploads:index')
+
+
+    def handle_ss_form(self, request):
+        form = AddScreenshotForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            for s in request.FILES.getlist('screenshots'):
+                if valid_screenshot_ext(s.name):
+                    handle_uploaded_screenshot(form, s, self.get_object())
+                else:
+                    # TODO: Let user know the extension was valid
+                    print("Invalid image extension.")
+
+            return redirect('s7uploads:upload', pk=self.get_object().id)
+        else:
+            # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+            return redirect('s7uploads:index')
+
+
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.id == self.get_object().user.user.id:
-            form = EditUploadForm(request.POST, request.FILES)
-            if form.is_valid():
-                handle_edit_upload(form, self.get_object())
-                return redirect('s7uploads:upload', pk=self.get_object().id)
-            else:
-                # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
-                return redirect('s7uploads:index')
+            print(request.POST)
+            if 'submit-ss' in request.POST:
+                return self.handle_ss_form(request)
+            elif 'submit-edit' in request.POST:
+                return self.handle_edit_form(request)
         else:
             return redirect('s7uploads:index')
 
@@ -328,6 +383,7 @@ class EditUploadView(generic.DetailView):
 
         form = EditUploadForm(initial=initials)
         c['form'] = form
+        c['screenshotform'] = AddScreenshotForm()
         return c
 
 class UploadView(generic.DetailView):
