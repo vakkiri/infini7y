@@ -1,3 +1,5 @@
-Django==2.2.12
-httplib2==0.14.0
-urllib3==1.25.8
+Django>=2.2.12
+httplib2>=0.14.0
+urllib3>=1.25.8
+gunicorn
+django-heroku

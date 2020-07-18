@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import django_heroku
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -125,3 +126,6 @@ MEDIA_URL = '/media/'
 # Redirects
 
 LOGOUT_REDIRECT_URL = 'index/'
+
+# heroku setup
+django_heroku.settings(locals())
