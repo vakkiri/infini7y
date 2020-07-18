@@ -10,7 +10,7 @@ dbus-python==1.2.16
 defer==1.0.6
 distro==1.4.0
 distro-info===0.23ubuntu1
-Django==2.2.12
+Django==2.2.13
 entrypoints==0.3
 evdev==1.3.0
 hidpidaemon==18.4.5
