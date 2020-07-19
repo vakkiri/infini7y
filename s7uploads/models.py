@@ -34,11 +34,7 @@ class Upload(models.Model):
     user = models.ForeignKey(S7User, on_delete=models.CASCADE)
     title = models.CharField(max_length = 50)
     description = models.TextField(verbose_name="Upload Description")
-    versionNotes = models.TextField(verbose_name="Version Notes")
-    uploadDate = models.DateTimeField('date published')
-    versionNumber = models.DecimalField(max_digits=5, decimal_places = 1)
     total_downloads = models.IntegerField()
-    version_downloads = models.IntegerField()
 
 
     def indexScreenshot(self):
@@ -67,6 +63,19 @@ class Upload(models.Model):
         return self.title
 
 
+class File(models.Model):
+    url = models.CharField(max_length=100)
+
+
+class UploadVersion(models.Model):
+    upload_id = models.ForeignKey(Upload, on_delete=models.CASCADE)
+    file_id = models.ForeignKey(File, on_delete=models.CASCADE)
+    date_added = models.DateTimeField()
+    version_notes = models.TextField()
+    version_name = models.CharField(max_length=10)
+    num_downloads = models.IntegerField()
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -90,7 +99,7 @@ class Screenshot(models.Model):
 class Review(models.Model):
     title = models.CharField(max_length = 50)
     text = models.TextField(max_length = 2048, verbose_name="Review Text")
-    upload = models.ForeignKey(Upload, on_delete=models.CASCADE)
+    upload = models.ForeignKey(UploadVersion, on_delete=models.CASCADE)
     user = models.ForeignKey(S7User, on_delete=models.CASCADE)
     pubDate = models.DateTimeField('date published')
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])

@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.urls import path
 from django.views import generic
 
-from .models import Upload, Review, S7User, Tag, Screenshot
+from .models import Upload, UploadVersion, Review, S7User, Tag, Screenshot
 from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm, EditUploadForm, AddScreenshotForm
 
 from .authorization import authorize_file_upload
@@ -51,7 +51,7 @@ def add_review(request, pk):
             if form.is_valid():
                 review = form.save(commit=False)
                 review.pubDate = timezone.now()
-                review.upload = Upload.objects.get(pk=pk)
+                review.upload = UploadVersion.objects.get(pk=pk)
                 review.user = S7User.objects.get(pk=1)
                 review.save()
 
@@ -60,14 +60,14 @@ def add_review(request, pk):
 
         else:
             form = ReviewForm()
-            return render(request, 's7uploads/upload.html', {'upload': Upload.objects.get(pk=pk), 'form': form})
+            return render(request, 's7uploads/upload.html', {'upload': UploadVersion.objects.get(pk=pk), 'form': form})
     else:
         return redirect('s7uploads:signup')
 
 
 def delete_upload(request, pk):
     user = request.user
-    upload = Upload.objects.get(pk=pk)
+    upload = UploadVersion.objects.get(pk=pk)
 
     if not user.is_anonymous and upload is not None and upload.user.user.id == user.id:
         upload.delete()
@@ -134,11 +134,9 @@ def signup(request):
 
 
 def download_file(request, pk):
-    upload = Upload.objects.get(pk=pk)
-    upload.version_downloads += 1
-    upload.total_downloads += 1
-    upload.save(update_fields=['version_downloads', 'total_downloads'])
-    print(upload.total_downloads)
+    upload = UploadVersion.objects.get(pk=pk)
+    upload.num_downloads += 1
+    upload.save(update_fields=['num_downloads'])
     return handle_download_file(upload.url)
 
 
@@ -168,7 +166,7 @@ def upload_file(request):
 
 
 class IndexView(generic.ListView):
-    model = Upload
+    model = UploadVersion
     template_name = 's7uploads/index.html'
     context_object_name = 'latest_upload_list'
     total_num_uploads = 0
@@ -187,14 +185,14 @@ class IndexView(generic.ListView):
 
 
     def get_queryset(self):
-        uploads = Upload.objects.filter(uploadDate__lte=timezone.now())
+        uploads = UploadVersion.objects.filter(date_added__lte=timezone.now())
         get = self.request.GET
 
         order_by = get.get('order_by')
         filter_tag = get.get('filter')
         search_tag = get.get('tags')
 
-        order_by = '-uploadDate' if order_by is None else order_by
+        order_by = '-date_added' if order_by is None else order_by
 
 
         # filter based on selected filters
@@ -361,7 +359,7 @@ class EditUploadView(generic.DetailView):
 
 
     def get_queryset(self):
-        return Upload.objects.filter(uploadDate__lte=timezone.now())
+        return UploadVersion.objects.filter(date_added__lte=timezone.now())
 
     def get_context_data(self, **kwargs):
         c = super(generic.DetailView, self).get_context_data(**kwargs)
@@ -391,7 +389,7 @@ class UploadView(generic.DetailView):
     template_name = 's7uploads/upload.html'
 
     def get_queryset(self):
-        return Upload.objects.filter(uploadDate__lte=timezone.now())
+        return UploadVersion.objects.filter(date_added__lte=timezone.now())
 
     def get_context_data(self, **kwargs):
         c = super(generic.DetailView, self).get_context_data(**kwargs)
