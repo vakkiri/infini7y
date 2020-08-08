@@ -304,7 +304,7 @@ class UserListView(generic.ListView):
 
 
 class EditUploadView(generic.DetailView):
-    model = Upload
+    model = UploadVersion
     template_name = 's7uploads/editupload.html'
 
     def get(self, request, *args, **kwargs):

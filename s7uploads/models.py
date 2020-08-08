@@ -30,7 +30,6 @@ def update_user(sender, instance, created, **kwargs):
 
 
 class Upload(models.Model):
-    url = models.CharField(max_length = 100)
     user = models.ForeignKey(S7User, on_delete=models.CASCADE)
     title = models.CharField(max_length = 50)
     description = models.TextField(verbose_name="Upload Description")
@@ -49,16 +48,6 @@ class Upload(models.Model):
         else:
             return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
-
-    def total_stars(self):
-        reviews = Review.objects.filter(upload=self)
-        num_reviews = reviews.count()
-        if num_reviews == 0:
-            return 0
-        else:
-            return reviews.aggregate(Sum('rating'))['rating__sum']
-
-
     def __str__(self):
         return self.title
 
@@ -74,6 +63,16 @@ class UploadVersion(models.Model):
     version_notes = models.TextField()
     version_name = models.CharField(max_length=10)
     num_downloads = models.IntegerField()
+
+    def total_stars(self):
+        reviews = Review.objects.filter(upload=self)
+        num_reviews = reviews.count()
+        if num_reviews == 0:
+            return 0
+        else:
+            return reviews.aggregate(Sum('rating'))['rating__sum']
+
+
 
 
 class Tag(models.Model):
