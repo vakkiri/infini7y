@@ -227,7 +227,7 @@ class IndexView(generic.ListView):
                 if order_by == 'ratings':
                     user_matches = [upload for upload in uploads if upload.user.id == user_id]
                 else:
-                    user_matches = uploads.filter(user__id=user_id).distinct()
+                    user_matches = uploads.filter(upload_id__user__id=user_id).distinct()
 
             if tag_matches is not None and user_matches is not None:
                 uploads = tag_matches | user_matches
@@ -385,8 +385,9 @@ class EditUploadView(generic.DetailView):
         return c
 
 class UploadView(generic.DetailView):
-    model = Upload
+    model = UploadVersion
     template_name = 's7uploads/upload.html'
+    context_object_name = 'upload'
 
     def get_queryset(self):
         return UploadVersion.objects.filter(date_added__lte=timezone.now())
