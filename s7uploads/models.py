@@ -35,10 +35,8 @@ class Upload(models.Model):
     description = models.TextField(verbose_name="Upload Description")
     total_downloads = models.IntegerField()
 
-
     def indexScreenshot(self):
         return Screenshot.objects.filter(upload=self)[0].url
-
 
     def avg_review(self):
         reviews = Review.objects.filter(upload=self)

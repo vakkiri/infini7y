@@ -63,9 +63,9 @@
 		{% with upload.upload_id as u %}
 
 		<li>
-		{% if upload.screenshot_set.exists %}
+		{% if upload.upload_id.screenshot_set.exists %}
 		<section id="imgcrop">
-            		<img src="{% get_media_prefix %}{{upload.indexScreenshot}}" alt="{% get_media_prefix %}{{upload.indexScreenshot}}" id="middle"></img>
+            		<img src="{% get_media_prefix %}{{upload.upload_id.indexScreenshot}}" alt="{% get_media_prefix %}{{upload.upload_id.indexScreenshot}}" id="middle"></img>
 		</section>
 		{% endif %}
 		
