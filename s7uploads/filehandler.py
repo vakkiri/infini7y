@@ -51,7 +51,7 @@ def add_upload_to_db(form, filepath, user):
 def add_screenshot_to_db(form, filepath, upload):
     screenshot = Screenshot(
                 url = filepath,
-                upload = upload
+                upload = upload.upload_id
             )
 
     screenshot.save()

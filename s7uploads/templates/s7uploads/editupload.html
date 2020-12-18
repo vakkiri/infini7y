@@ -26,7 +26,7 @@
 {% endif %}
 
 <section id="singleupload">
-{% if user|user_owns_upload:upload.user %}
+{% if user.is_authenticated %}
 <section id="upload">
 	<section id="uploadheader">
 		<form enctype="multipart/form-data" method="post">
@@ -34,19 +34,22 @@
 
 		<a id="download" href="#">Download</a>
 		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
-		<h1>{{form.title}} by {{ upload.user.user.username }}</h1>
+		<h1>{{form.title}} by {{ upload.upload_id.user.user.username }}</h1>
 
 		<div id="blackstripe"></div>
 
 		<section id="uploadtext">
-			<h3>{{ upload.user.user.username }} on {{ upload.uploadDate }} </h3>
+			<h3>{{ upload.upload_id.user.user.username }} on {{ upload.date_added }} </h3>
 			{{ form.description.as_textarea }}
-			<h4> Version {{ form.versionNumber }} Notes: </h4>
+			<br>
+			<br>
+			<h4> Version {{ upload.version_name }} Notes: </h4>
 			<p> {{ form.versionNotes.as_textarea }} </p>
 
+			<h4> Tags </h4>
 			{{ form.tagline }}
 			<br>
-
+			<br>
 			<input type="submit" name='submit-edit' value="Submit Changes">
 			</form>
 			<br><br>
@@ -54,10 +57,10 @@
 
 
 		<section id="thumbnailscreenshots">
-			{% for screenshot in upload.screenshot_set.all %}
+			{% for screenshot in upload.upload_id.screenshot_set.all %}
 				<section id="thumbnailscreenshot">
                     <img src="{% get_media_prefix %}{{screenshot.url}}" alt="{{screenshot.url}}"></img>
-				<a id="deletess" href="{% url 's7uploads:delete_ss' pk=screenshot.id %}">x</a>
+				<a id="deletess" href="{% url 's7uploads:delete_ss' pk=screenshot.id %}">⛝</a>
 				</section>
 			{% endfor %}
 			<form enctype="multipart/form-data" method="post">

@@ -30,20 +30,23 @@
 {% if user_list %}
 	<h1>Users</h1>
 	<div id="blackstripe"></div>
-	<section id="userlist">
+	<div id="userlist">
 
-	<ul>
+		<ul>
 
-	{% for user in user_list %}
-		<li>
-		<a href="{% url 's7uploads:index' %}?tags={{user.user.username}}"> {{ user.user.username }} </a>
-		<h1>{{ user.num_uploads }} uploads, {{ user.num_reviews }} reviews</h1>
-		</li>
-	{% endfor %}
+		{% for user in user_list %}
+			<li>
+			<div id="userlisttext">
+			<a href="{% url 's7uploads:index' %}?tags={{user.user.username}}"> {{ user.user.username }} </a>
+			<h1>{{ user.num_uploads }} uploads, {{ user.num_reviews }} reviews</h1>
+			</div>
+			<img src="/static/s7uploads/images/default_profile.jpg"></img>
+			</li>
+		{% endfor %}
 
-	</ul>
+		</ul>
 
-	</section>
+	</div>
 {% else %}
 
 	<p> Nothing to see here. </p>

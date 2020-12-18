@@ -26,7 +26,7 @@ class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
     description = forms.CharField()
     versionNotes = forms.CharField(required=False)
-    versionNumber = forms.DecimalField(max_digits=5, decimal_places=1)
+    versionNumber = forms.CharField(max_length=5)
     file = forms.FileField()
     screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     tagline = forms.CharField(required=False)
@@ -36,7 +36,7 @@ class EditUploadForm(forms.Form):
     title = forms.CharField(max_length=50)
     description = forms.CharField()
     versionNotes = forms.CharField(required=False)
-    versionNumber = forms.DecimalField(max_digits=5, decimal_places=1)
+    versionNumber = forms.CharField(max_length=5)
     tagline = forms.CharField(required=False)
 
 

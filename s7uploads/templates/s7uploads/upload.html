@@ -30,10 +30,13 @@
 	<section id="uploadheader">
 		<a id="download" href="#">Download</a>
 		{% if user|user_owns_upload:upload.upload_id.user %}
+		<a id="editupload" href="{% url 's7uploads:edit' upload.id %}">New Version</a>
 		<a id="editupload" href="{% url 's7uploads:edit' upload.id %}">Edit</a>
 		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
 		{% endif %}
-		<h1>{{ upload.upload_id.title }} by {{ upload.upload_id.user.user.username }}</h1>
+		<div id="upload-title">
+			<h1>{{ upload.upload_id.title }}</h1><h3> by </h3><h2>{{ upload.upload_id.user.user.username }}</h2>
+		</div>
 
 		<div id="blackstripe"></div>
 

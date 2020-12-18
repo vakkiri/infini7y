@@ -102,9 +102,8 @@ def user_login(request):
                 login(request, user)
                 return redirect('s7uploads:index')
         else:
-            # TODO: display invalid login message
             form = AuthenticationForm()
-            return render(request, 's7uploads/login.html', {'form': form})
+            return render(request, 's7uploads/login.html', {'form': form, 'invalid': True})
     else:
         form = AuthenticationForm()
 
@@ -176,11 +175,8 @@ class IndexView(generic.ListView):
     def get_uploads_in_range(self, uploads):
         # the -1 is due to displaying start page as 1 instead of 0 in browser
         start_page = self.kwargs['page'] - 1 if 'page' in self.kwargs else 0
-        print("page ", start_page)
         start_index = start_page * self.uploads_per_page
-        print("start index: ", start_index)
         end_index = start_index + self.uploads_per_page
-        print("end index: ", end_index)
         return uploads[start_index:end_index]
 
 
@@ -311,12 +307,13 @@ class EditUploadView(generic.DetailView):
         try:
             self.object = self.get_object()
             # TODO: redirect to forbidden page instead of index
-            if not self.request.user.is_authenticated or self.object.user.user.id != self.request.user.id:
+            if not self.request.user.is_authenticated or self.object.upload_id.user.user.id != self.request.user.id:
                 return redirect('s7uploads:index')
-        except:
+        except Exception as e:
+            print("Exception editing upload: ", e)
             return redirect('s7uploads:index')
 
-        context = self.get_context_data(object=self.object)
+        context = self.get_context_data(upload=self.object)
         return self.render_to_response(context)
 
 
@@ -348,7 +345,7 @@ class EditUploadView(generic.DetailView):
 
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.id == self.get_object().user.user.id:
+        if request.user.is_authenticated and request.user.id == self.get_object().upload_id.user.user.id:
             print(request.POST)
             if 'submit-ss' in request.POST:
                 return self.handle_ss_form(request)
@@ -372,10 +369,10 @@ class EditUploadView(generic.DetailView):
 
         # set initial values of the form to the object values
         initials = {}
-        initials['title'] = self.object.title
-        initials['description'] = self.object.description
-        initials['versionNotes'] = self.object.versionNotes
-        initials['versionNumber'] = self.object.versionNumber
+        initials['title'] = self.object.upload_id.title
+        initials['description'] = self.object.upload_id.description
+        initials['versionNotes'] = self.object.version_notes
+        initials['versionNumber'] = self.object.version_name
        
         # TODO: populate initials with existing tags
 

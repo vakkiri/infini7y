@@ -10,7 +10,7 @@
 <div id = "banner">
 	<nav>
 	<ul id="navlinks">
-	<li ><a href="{%url 's7uploads:index' %}" class="lightlink">infini<span class="sitecolor">7</span>y</a></li>
+	<li><a href="{%url 's7uploads:index' %}" class="lightlink">infini<span class="sitecolor">7</span>y</a></li>
 	<li ><a href="{%url 's7uploads:index' %}" class="lightlink">Downloads</a></li>
 	{% if user and not user.is_anonymous %}
 	<li><a href="{% url 's7uploads:index' %}?tags={{user.username}}" class="lightlink">Uploads</a></li>

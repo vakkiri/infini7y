@@ -36,6 +36,17 @@ div#graystripe {
 	float: right;
 }
 
+#userbanner-nolog {
+	margin-bottom: 16px;
+	padding: 8px;
+	border-radius: 8px;
+	border: 1px solid;
+	border-color: rgb(120, 180, 190);
+	background-color: rgb(120, 180, 190);
+	color: rgb(255, 255, 255);
+	float: right;
+}
+
 #userbanner h3 {
 	font-family: sans-serif;
 	font-size: 18;
@@ -55,7 +66,7 @@ div#graystripe {
 }
 
 #userbanner img {
-	width: 100px;
+	max-width: 100px;
 	border: 0px solid;
 	border-radius: 8px;
 	float: left;
@@ -77,7 +88,7 @@ div#graystripe {
 	text-decoration: none;
 	text-align: center;
 	font-size: 14px;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 4px;
 	padding-right: 8px;
 	float: left;
@@ -151,7 +162,6 @@ div#banner {
 	float: left;
 	position: relative;
 	clear: left;
-	width: 215px;
 }
 
 #sidebar-content {
@@ -160,6 +170,7 @@ div#banner {
 	border-color: rgb(240, 240, 245);
 	padding: 8px;
 	padding-top: 0px;
+	padding-right: 8px;
 }
 
 #sidebar h2 {
@@ -176,6 +187,34 @@ div#banner {
 
 #uploadheader {
 	width: 800px;
+}
+
+div #upload-title {
+	display: inline;
+}
+
+div#upload-title h1 {
+	font-weight: bold;
+	font-size: 24px;
+	display: inline;
+	text-decoration: none;
+	color: rgb(60, 60, 60);
+}
+
+div#upload-title h3 {
+	font-weight: normal;
+	font-size: 24px;
+	display: inline;
+	text-decoration: none;
+	color: rgb(60, 60, 60);
+}
+
+div#upload-title h2 {
+	font-weight: normal;
+	font-size: 24px;
+	display: inline;
+	text-decoration: none;
+	color: rgb(120, 180, 190);
 }
 
 #thumbnailscreenshots {
@@ -301,18 +340,21 @@ div#banner {
 	background-color: rgb(120, 180, 190);
 	text-decoration: none;
 	font-size: 16px;
-	border-radius: 4px;
-	padding: 4px;
+	border-radius: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
 	margin-left: 4px;
 }
 
 #editupload {
 	float: right;
 	color: rgb(255, 255, 255);
-	background-color: rgb(120, 180, 190);
+	background-color: rgb(120, 200, 180);
 	text-decoration: none;
 	font-size: 16px;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 4px;
 	margin-left: 4px;
 }
@@ -323,7 +365,7 @@ div#banner {
 	background-color: rgb(200, 20, 50);
 	text-decoration: none;
 	font-size: 16px;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 4px;
 	margin-left: 4px;
 }
@@ -335,7 +377,7 @@ div#banner {
 	background-color: rgb(200, 20, 50);
 	text-decoration: none;
 	font-size: 16px;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 4px;
 	right: 4px;
 }
@@ -393,19 +435,21 @@ div#banner {
 }
 
 #userlist ul {
-	width: 512px;
+	margin: 0 auto;
 }
 
 #userlist li {
-	position: relative;
-	float: left;
-	margin-right: 32px;
-	background-color: rgb(245, 245, 250);
-	border-color: rgb(235, 235, 240);
 	padding-top: 8px;
 	padding-bottom: 8px;
-	padding-left: 32px;
-	padding-right: 32px;
+	padding-left: 8px;
+	padding-right: 8px;
+	display: inline-block;
+	border-radius: 4px;
+}
+
+#userlisttext {
+	float: right;
+	margin-left: 8px;
 }
 
 #userlist li a {
@@ -417,6 +461,12 @@ div#banner {
 #userlist h1 {
 	font-size: 14px;
 	color: rgb(80, 80, 85);
+}
+
+#userlist img {
+	max-width: 100px;
+	float: left;
+	border-radius: 4px;
 }
 
 #upload label {
@@ -432,16 +482,13 @@ div#banner {
 	padding: 2px;
 	margin-right: 4px;
 	text-decoration: none;
+	font-weight: bold;
 	font-size: 18px;
 	color: rgb(255, 255, 255);
 	background-color: rgb(120, 180, 190);
-	border: 1px solid;
-	border-color: rgb(15, 5, 10);
+	border-radius: 3px;
 }
 
 .sitecolor {
 	color: rgb(120, 180, 190);
 }
-
-
-

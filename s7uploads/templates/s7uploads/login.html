@@ -22,6 +22,11 @@
 		</p>
 	{% endfor %}
 	<button type="submit">Log In</button>
+	{% if invalid %}
+	<br>
+	<br>
+	<p style="color:red;">Credentials not found.</p>
+	{% endif %}
 </form>
 
 </section>
