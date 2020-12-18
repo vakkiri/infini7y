@@ -1,2 +1,3 @@
 # infini7y
-Rebuild of Simplici7y using python/django.
+
+A simple filesharing website for the marathon/aleph one community.
