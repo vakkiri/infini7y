@@ -4,8 +4,12 @@
 	font-family: sans-serif;
 }
 
+body {
+	background-color: rgb(252, 252, 252);
+}
+
 div#stripe {
-	background-color: rgb(120, 180, 190);
+	background-color: rgb(80, 170, 250);
 	height: 2px;
 	width: 100%;
 	position: fixed;
@@ -28,12 +32,9 @@ div#graystripe {
 }
 
 #userbanner {
-	margin-bottom: 16px;
-	padding: 8px;
-	border-radius: 8px;
-	border-color: rgb(240, 240, 245);
-	background-color: rgb(235, 235, 240);
-	float: right;
+	position: fixed;
+	right: 64px;
+	height: 100%;
 }
 
 #userbanner-nolog {
@@ -41,8 +42,8 @@ div#graystripe {
 	padding: 8px;
 	border-radius: 8px;
 	border: 1px solid;
-	border-color: rgb(120, 180, 190);
-	background-color: rgb(120, 180, 190);
+	border-color: rgb(100, 170, 250);
+	background-color: rgb(100, 170, 250);
 	color: rgb(255, 255, 255);
 	float: right;
 }
@@ -84,7 +85,7 @@ div#graystripe {
 
 #sideupload a {
 	color: rgb(250, 250, 255);
-	background-color: rgb(120, 180, 190);
+	background-color: rgb(100, 170, 250);
 	text-decoration: none;
 	text-align: center;
 	font-size: 14px;
@@ -98,19 +99,75 @@ div#graystripe {
 div#banner {
 	background-color: rgb(15, 5, 10);
 	position: fixed;
-	top: 0;
+	top: 2;
 	width: 100%;
-	display: block;
+	display: inline-block;
+	height: 32px;
+	padding-top: 10px;
 
-	padding-bottom: 8px;
-	padding-top: 10px; 
-	margin-top: 2px;
+	text-align: center;
+}
 
-	text-align: left;
+div#searchbanner {
+	background-color: rgb(120, 70, 180);
+	position: fixed;
+	top: 44px;
+	padding-top: 10px;
+	width: 100%;
+	display: flex;
+
+	padding-bottom: 10px;
+}
+
+#searchbannercontent {
+	background-color: rgb(255, 255, 255);
+	border-radius: 4px;
+	display: flex;
+	margin: 0 auto;
+}
+
+.searchicon {
+	padding-right: 8px;
+	padding-left: 8px;
+	font-size: 22;
+	color: rgb(120, 70, 180);
+	font-weight: bold;
+	float: left;
+}
+
+#searchbanner input {
+	height: 26px;
+	border: 0px solid;
+	border-radius: 2px;
+	color: rgb(190, 190, 190);
+	font-size: 16;
+	color: rgb(130, 130, 130);
+}
+
+#searchbanner input:focus {
+	height: 24px;
+	border: 0px solid;
+	border-radius: 2px;
+	color: rgb(20, 10, 20);
+	outline: none;
+}
+
+
+.searchcategory {
+	font-size: 16;
+	color: rgb(130, 130, 130);
+	padding-right: 4px;
+	padding-left: 8px;
+	border: 0px;
+	background-color: rgb(255, 255, 255);
+	margin-right: 4px;
+}
+
+.searchcategory:focus {
+	outline: none;
 }
 
 #navlinks {
-	width: 1024px;
 	margin: 0 auto;
 }
 
@@ -147,42 +204,13 @@ div#banner {
 }
 
 #main-content {
-	width: 1024px;
 	margin: 0 auto;
-	margin-top: 96px;
-	float: center;
+	margin-top: 128px;
 }
 
 #main-content h1 {
 	font-weight: normal;
 	padding-bottom: 8px;
-}
-
-#sidebar {
-	float: left;
-	position: relative;
-	clear: left;
-}
-
-#sidebar-content {
-	background-color: rgb(235, 235, 240);
-	border-radius: 8px;
-	border-color: rgb(240, 240, 245);
-	padding: 8px;
-	padding-top: 0px;
-	padding-right: 8px;
-}
-
-#sidebar h2 {
-	font-size: 22px;
-	font-weight: normal;
-	padding-top: 8px;
-}
-
-#sidebar li {
-	list-style-type: none;
-	text-decoration: none;
-	margin-left: 16px;
 }
 
 #uploadheader {
@@ -214,7 +242,7 @@ div#upload-title h2 {
 	font-size: 24px;
 	display: inline;
 	text-decoration: none;
-	color: rgb(120, 180, 190);
+	color: rgb(100, 170, 250);
 }
 
 #thumbnailscreenshots {
@@ -249,14 +277,12 @@ div#upload-title h2 {
 #upload {
 	margin: 0 auto;
 	width: 512px;
+	width: 50%;
 	position: relative;
 }
 
-#uploadlist {
-	float: center;
-}
-
 #singleupload {
+	padding-left: 64px;
 	float: left;
 }
 
@@ -278,6 +304,10 @@ div#upload-title h2 {
 	background-color: rgb(245, 245, 250);
 	border-radius: 8px;
 	margin-bottom: 16px;
+}
+
+#upload li:hover {
+	background-color: rgb(240, 240, 250);
 }
 
 #indexuploadtext {
@@ -337,7 +367,7 @@ div#upload-title h2 {
 #download {
 	float: right;
 	color: rgb(255, 255, 255);
-	background-color: rgb(120, 180, 190);
+	background-color: rgb(100, 170, 250);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 8px;
@@ -351,7 +381,7 @@ div#upload-title h2 {
 #editupload {
 	float: right;
 	color: rgb(255, 255, 255);
-	background-color: rgb(120, 200, 180);
+	background-color: rgb(100, 200, 190);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 8px;
@@ -406,7 +436,7 @@ div#upload-title h2 {
 }
 
 #imgcrop {
-	height: 224px;
+	width: 100%;
 	overflow: hidden;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
@@ -425,12 +455,11 @@ div#upload-title h2 {
 	text-decoration: none;
 	color: rgb(255, 250, 255);
 	border-style: solid;
-	border-color: rgb(120, 180, 190);
+	border-color: rgb(100, 170, 250);
 	border-radius: 8px;
 	padding: 4px;
 	border-width: 1px;
 	margin-top: -4px;
-	float: right;
 	margin-right: 8px;
 }
 
@@ -485,10 +514,10 @@ div#upload-title h2 {
 	font-weight: bold;
 	font-size: 18px;
 	color: rgb(255, 255, 255);
-	background-color: rgb(120, 180, 190);
+	background-color: rgb(100, 170, 250);
 	border-radius: 3px;
 }
 
 .sitecolor {
-	color: rgb(120, 180, 190);
+	color: rgb(100, 170, 250);
 }

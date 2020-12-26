@@ -16,6 +16,7 @@ urlpatterns = [
 	path('logout/', views.logout_view, name='logout'),
 	path('uploads/<int:pk>/', views.UploadView.as_view(), name='upload'),
 	path('edit/<int:pk>/', views.EditUploadView.as_view(), name='edit'),
+	path('newversion/<int:pk>/', views.NewVersionView.as_view(), name='newversion'),
 	path('delete/<int:pk>/', views.delete_upload, name='delete'),
 	path('delete_ss/<int:pk>/', views.delete_screenshot, name='delete_ss'),
 	path('new_upload/', views.upload_file, name='new_upload'),

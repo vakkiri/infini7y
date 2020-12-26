@@ -13,7 +13,6 @@
 	<li><a href="{%url 's7uploads:index' %}" class="lightlink">infini<span class="sitecolor">7</span>y</a></li>
 	<li ><a href="{%url 's7uploads:index' %}" class="lightlink">Downloads</a></li>
 	{% if user and not user.is_anonymous %}
-	<li><a href="{% url 's7uploads:index' %}?tags={{user.username}}" class="lightlink">Uploads</a></li>
 	{% endif %}
 	<li><a href="{%url 's7uploads:reviews' %}" class="lightlink">Reviews</a></li>
 	<li><a href="{%url 's7uploads:users' %}" class="lightlink">Users</a></li>
@@ -27,6 +26,33 @@
 	{% endif %}
 	<ul/>
 	</nav>
+</div>
+<div id="searchbanner">
+	<section id="searchbannercontent">
+		<p class="searchicon">☌</p>
+		<form action="search_uploads/?{{ request.GET.urlencode }}" method="post">
+			{% csrf_token %}
+			{% for field in search_form %}
+			{{ field }}
+			{% endfor %}
+		</form>
+		<select name="searchcategory" id="searchcategory" class="searchcategory">
+			<option value="any" selected>Any Filetype</option>
+			<option value="maps">Maps</option>
+			<option value="scenarios">Scenarios</option>
+			<option value="plugins">Plugins</option>
+			<option value="scripts">Scripts</option>
+			<option value="utilities">Utilities</option>
+			<option value="physics">Physics</option>
+		</select>
+		<select name="searchorder" id="searchorder" class="searchcategory">
+			<option value="newest" selected>Newest</option>
+			<option value="oldest">Oldest</option>
+			<option value="bestrated">Best Rated</option>
+			<option value="mostrated">Most Rated</option>
+			<option value="mostdownloads">Most Downloaded</option>
+		</select>
+	</section>
 </div>
 
 <div id="stripe"></div>

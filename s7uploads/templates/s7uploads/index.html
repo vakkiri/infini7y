@@ -7,7 +7,6 @@
 {% block content %}
 
 <section id="main-content">
-
 {% if user %}
 	{% if user.is_anonymous %}
 		<section id="userbanner-nolog">
@@ -21,41 +20,13 @@
 			<h5>{{ s7user.num_uploads }} uploads</h5>
 			<h5>{{ s7user.num_reviews }} reviews</h5>
 			<section id="sideupload">
-			<a href="{%url 's7uploads:new_upload' %}">+ Upload</a>
+			<a href="{%url 's7uploads:new_upload' %}">⇡ Upload</a>
 			</section>
 			</section>
 		</section>
 	{% endif %}
 {% endif %}
 
-<section id="sidebar">
-	<section id="sidebar-content">
-	<h2>Search:</h2>
-    <form action="search_uploads/?{{ request.GET.urlencode }}" method="post">
-        {% csrf_token %}
-        {% for field in search_form %}
-        {{ field }}
-        {% endfor %}
-    </form>
-	<h2>Sort by:</h2>
-	<ul>
-		<li> <a href="?{% update_query request order_by='-date_added' %}">Newest</a></li>
-		<li> <a href="?{% update_query request order_by='date_added' %}">Oldest</a></li>
-		<li> <a href="?{% update_query request order_by='ratings' %}">Best Rated</a></li>
-    <h2>Filter by:</h2>
-	<ul>
-		<li> <a href="?{% toggle_query request filter='map' %}">Maps</a></li>
-		<li> <a href="?{% toggle_query request filter='scenario' %}">Scenarios</a></li>
-		<li> <a href="?{% toggle_query request filter='plugin#script' %}">Plugins + Scripts</a></li>
-		<li> <a href="?{% toggle_query request filter='utility' %}">Utilities</a></li>
-		<li> <a href="?{% toggle_query request filter='physics' %}">Physics</a></li>
-	</ul>
-    <br>
-
-	</section>
-</section>
-
-<section id="uploadlist">
 <section id="upload">
 
 {% if latest_upload_list %}
@@ -74,7 +45,7 @@
 
 		<section id="indexuploadtext">
 			<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ u.title }} {{ upload.version_name }}</a></h2>
-			<a id="download" href="{%url 's7uploads:download' upload.id %}">Download</a>
+			<a id="download" href="{%url 's7uploads:download' upload.id %}">⇣ Download</a>
 			{% if user|user_owns_upload:upload.user %}
 			<a id="download" href="{%url 's7uploads:edit' upload.id %}">Edit</a>
 			{% endif %}
@@ -103,13 +74,12 @@
 
 {% endif %}
 
-<section id="pagenums">
-{% for page in num_pages %}
-	<a href="{% url 's7uploads:index' page %}?{{request.GET.urlencode}}">{{page}}</a>
-{% endfor %}
-</section>
+	<section id="pagenums">
+	{% for page in num_pages %}
+		<a href="{% url 's7uploads:index' page %}?{{request.GET.urlencode}}">{{page}}</a>
+	{% endfor %}
+	</section>
 
-</section>
 </section>
 
 </section>

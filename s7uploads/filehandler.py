@@ -125,9 +125,28 @@ def handle_download_file(file_path):
 def handle_edit_upload(form, upload):
     data = form.cleaned_data
     tagline = data.pop('tagline')
-    Upload.objects.filter(pk=upload.id).update(**data)
+    print(data)
+    version = UploadVersion.objects.filter(pk=upload.id)
+    upload_id = UploadVersion.objects.get(pk=upload.id).upload_id.id
+    upload = Upload.objects.filter(pk=upload_id)
+    upload.update(**{"title": data['title']})
+    version.update(**{"version_notes": data['versionNotes']})
+    version.update(**{"version_name": data['versionNumber']})
 
     if len(tagline) > 0:
-        add_tag(str(tagline), upload)
+        add_tag(str(tagline), Upload.objects.get(pk=upload_id))
+
+
+def handle_version_upload(form, upload):
+    data = form.cleaned_data
+    tagline = data.pop('tagline')
+    print(data)
+    version = UploadVersion.objects.filter(pk=upload.id)
+    upload_id = UploadVersion.objects.get(pk=upload.id).upload_id.id
+    upload = Upload.objects.filter(pk=upload_id)
+    upload.update(**{"description": data['description']})
+
+    if len(tagline) > 0:
+        add_tag(str(tagline), Upload.objects.get(pk=upload_id))
 
 

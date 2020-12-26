@@ -30,7 +30,7 @@
 	<section id="uploadheader">
 		<a id="download" href="#">Download</a>
 		{% if user|user_owns_upload:upload.upload_id.user %}
-		<a id="editupload" href="{% url 's7uploads:edit' upload.id %}">New Version</a>
+		<a id="editupload" href="{% url 's7uploads:newversion' upload.id %}">New Version</a>
 		<a id="editupload" href="{% url 's7uploads:edit' upload.id %}">Edit</a>
 		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
 		{% endif %}

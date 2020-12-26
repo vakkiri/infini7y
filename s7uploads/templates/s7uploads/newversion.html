@@ -34,7 +34,7 @@
 
 		<a id="download" href="#">Download</a>
 		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
-		<h1>{{form.title}} by {{ upload.upload_id.user.user.username }}</h1>
+		<h1>{{upload.upload_id.title}} by {{ upload.upload_id.user.user.username }}</h1>
 
 		<div id="blackstripe"></div>
 

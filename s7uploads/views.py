@@ -9,11 +9,11 @@ from django.utils import timezone
 from django.urls import path
 from django.views import generic
 
-from .models import Upload, UploadVersion, Review, S7User, Tag, Screenshot
-from .forms import ReviewForm, SearchForm, SignUpForm, UploadFileForm, EditUploadForm, AddScreenshotForm
+from .models import *
+from .forms import *
 
 from .authorization import authorize_file_upload
-from .filehandler import handle_uploaded_file, handle_uploaded_screenshot, handle_download_file, handle_edit_upload, valid_upload_ext, valid_screenshot_ext
+from .filehandler import *
 
 from .urltools import strip_get_tags
 
@@ -276,6 +276,7 @@ class ReviewView(generic.ListView):
             s7user = S7User.objects.filter(user=user)[:1]
             if s7user:
                 c['s7user'] = s7user.get()
+        c['search_form'] = SearchForm()
         return c
 
 
@@ -295,6 +296,9 @@ class UserListView(generic.ListView):
             s7user = S7User.objects.filter(user=user)[:1]
             if s7user:
                 c['s7user'] = s7user.get()
+
+
+        c['search_form'] = SearchForm()
 
         return c
 
@@ -324,6 +328,7 @@ class EditUploadView(generic.DetailView):
             return redirect('s7uploads:upload', pk=self.get_object().id)
         else:
             # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+            print("Error: Invalid edit form.")
             return redirect('s7uploads:index')
 
 
@@ -373,13 +378,97 @@ class EditUploadView(generic.DetailView):
         initials['description'] = self.object.upload_id.description
         initials['versionNotes'] = self.object.version_notes
         initials['versionNumber'] = self.object.version_name
-       
-        # TODO: populate initials with existing tags
-
+        tags = Tag.objects.filter(uploads__exact=self.object.upload_id)
+        tags = ' '.join(['#' + tag.name for tag in tags])
+        initials['tagline'] = tags
         form = EditUploadForm(initial=initials)
         c['form'] = form
         c['screenshotform'] = AddScreenshotForm()
+        c['search_form'] = SearchForm()
         return c
+
+class NewVersionView(generic.DetailView):
+    model = UploadVersion
+    template_name = 's7uploads/newversion.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+            # TODO: redirect to forbidden page instead of index
+            if not self.request.user.is_authenticated or self.object.upload_id.user.user.id != self.request.user.id:
+                return redirect('s7uploads:index')
+        except Exception as e:
+            print("Exception editing upload: ", e)
+            return redirect('s7uploads:index')
+
+        c = self.get_context_data(upload=self.object)
+        c['search_form'] = SearchForm()
+        return self.render_to_response(c)
+
+
+    def handle_edit_form(self, request):
+        form = NewVersionForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_version_upload(form, self.get_object())
+            return redirect('s7uploads:upload', pk=self.get_object().id)
+        else:
+            # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+            print("Error: Invalid edit form.")
+            return redirect('s7uploads:index')
+
+
+    def handle_ss_form(self, request):
+        form = AddScreenshotForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            for s in request.FILES.getlist('screenshots'):
+                if valid_screenshot_ext(s.name):
+                    handle_uploaded_screenshot(form, s, self.get_object())
+                else:
+                    # TODO: Let user know the extension was valid
+                    print("Invalid image extension.")
+
+            return redirect('s7uploads:upload', pk=self.get_object().id)
+        else:
+            # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
+            return redirect('s7uploads:index')
+
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.id == self.get_object().upload_id.user.user.id:
+            print(request.POST)
+            if 'submit-ss' in request.POST:
+                return self.handle_ss_form(request)
+            elif 'submit-edit' in request.POST:
+                return self.handle_edit_form(request)
+        else:
+            return redirect('s7uploads:index')
+
+
+    def get_queryset(self):
+        return UploadVersion.objects.filter(date_added__lte=timezone.now())
+
+    def get_context_data(self, **kwargs):
+        c = super(generic.DetailView, self).get_context_data(**kwargs)
+        user = self.request.user
+
+        if not user.is_anonymous:
+            s7user = S7User.objects.filter(user=user)[:1]
+            if s7user:
+                c['s7user'] = s7user.get()
+
+        # set initial values of the form to the object values
+        initials = {}
+        initials['description'] = self.object.upload_id.description
+        tags = Tag.objects.filter(uploads__exact=self.object.upload_id)
+        tags = ' '.join(['#' + tag.name for tag in tags])
+        initials['tagline'] = tags
+        form = EditUploadForm(initial=initials)
+        c['form'] = form
+        c['search_form'] = SearchForm()
+        c['screenshotform'] = AddScreenshotForm()
+        return c
+
 
 class UploadView(generic.DetailView):
     model = UploadVersion
@@ -396,6 +485,8 @@ class UploadView(generic.DetailView):
             s7user = S7User.objects.filter(user=user)[:1]
             if s7user:
                 c['s7user'] = s7user.get()
+
+        c['search_form'] = SearchForm()
 
         return c
 
