@@ -5,7 +5,7 @@
 }
 
 body {
-	background-color: rgb(25, 25, 40);
+	background-color: rgb(252, 252, 252);
 }
 
 div#stripe {
@@ -34,9 +34,7 @@ div#graystripe {
 #userbanner {
 	position: fixed;
 	right: 64px;
-	background-color: rgb(45, 45, 70);
-	padding: 16px;
-	border-radius: 8px;
+	height: 100%;
 }
 
 #userbanner-nolog {
@@ -58,8 +56,7 @@ div#graystripe {
 }
 
 #userbanner h3 a {
-	color: rgb(255, 255, 255);
-	text-decoration: none;
+	color: rgb(0, 0, 0);
 }
 
 #userbanner h4 {
@@ -71,7 +68,7 @@ div#graystripe {
 
 #userbanner img {
 	max-width: 100px;
-	border: 1px solid white;
+	border: 0px solid;
 	border-radius: 8px;
 	float: left;
 	clear: right;
@@ -80,8 +77,6 @@ div#graystripe {
 
 #userbanner h5 {
 	font-weight: normal;
-	font-size: 14px;
-	color: rgb(250, 250, 250);
 }
 
 #userbannertext {
@@ -89,7 +84,7 @@ div#graystripe {
 }
 
 #sideupload a {
-	color: rgb(255, 255, 255);
+	color: rgb(250, 250, 255);
 	background-color: rgb(100, 170, 250);
 	text-decoration: none;
 	text-align: center;
@@ -102,7 +97,7 @@ div#graystripe {
 }
 
 div#banner {
-	background-color: rgb(20, 20, 40);
+	background-color: rgb(20, 20, 35);
 	position: fixed;
 	top: 2;
 	width: 100%;
@@ -114,19 +109,14 @@ div#banner {
 }
 
 div#searchbanner {
-	background-color: rgb(120, 60, 180);
-	background: linear-gradient(
-		45deg,
-		rgb(110, 30, 190),
-		rgb(180, 60, 120)
-	);
+	background-color: rgb(120, 70, 190);
 	position: fixed;
 	top: 44px;
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 10px;
 	width: 100%;
 	display: flex;
 
+	padding-bottom: 10px;
 }
 
 #searchbannercontent {
@@ -139,19 +129,14 @@ div#searchbanner {
 .searchicon {
 	padding-right: 8px;
 	padding-left: 8px;
-	margin-top: 2px;
 	font-size: 22;
 	color: rgb(120, 70, 180);
 	font-weight: bold;
 	float: left;
-	transform: rotate(110deg);
-	background-color: rgba(255, 255, 255, 0);
-	border: 0px;
-	outline: none;
 }
 
 #searchbanner input {
-	height: 32px;
+	height: 26px;
 	border: 0px solid;
 	border-radius: 2px;
 	color: rgb(190, 190, 190);
@@ -160,6 +145,7 @@ div#searchbanner {
 }
 
 #searchbanner input:focus {
+	height: 24px;
 	border: 0px solid;
 	border-radius: 2px;
 	color: rgb(20, 10, 20);
@@ -315,26 +301,19 @@ div#upload-title h2 {
 
 #upload li {
 	list-style-type: none;
-	background-color: rgb(40, 40, 60);
+	background-color: rgb(245, 245, 250);
 	border-radius: 8px;
 	margin-bottom: 16px;
-	padding-top: 6px;
+	opacity: 0.92;
 }
 
 #upload li:hover {
-	background-color: rgb(45, 45, 70);
+	background-color: rgb(240, 240, 245);
+	opacity: 1.0;
 }
 
 #indexuploadtext {
-	padding-top: 6px;
-	padding-bottom: 8px;
-	padding-left: 16px;
-	padding-right: 16px;
-	color: rgb(250, 250, 250);
-}
-
-#indexheader {
-	border-bottom: 2px solid rgb(50, 50, 70);
+	padding: 6px;
 }
 
 #uploadtext {
@@ -350,30 +329,19 @@ div#upload-title h2 {
 }
 
 #upload h1 {
+	font-size: 28px;
 	font-weight: normal;
 }
 
 #upload h2 {
+	font-size: 22px;
 	font-weight: normal;
 	display: inline;
+	text-decoration: underline;
 }
 
-.mediumtext {
-	font-size: 14;
-}
-
-.blue p {
-	color: rgb(100, 170, 250);
-}
-
-.plainlink a {
-	color: rgb(255, 255, 255);
-	text-decoration: none;
-}
-
-.bluelink a {
-	color: rgb(100, 170, 250);
-	text-decoration: none;
+#upload h2 a {
+	color: rgb(15, 5, 10);
 }
 
 #community li {
@@ -447,16 +415,33 @@ div#upload-title h2 {
 }
 
 #upload h3 {
+	color: rgb(140, 140, 145);
 	font-size: 14px;
 	font-weight: normal;
 	padding-bottom: 8px;
-	color: rgb(220, 220, 230);
+}
+
+#upload h4 {
+	color: rgb(15, 5, 10);
+	font-size: 13px;
+	color: 
+}
+
+#upload li a {
+	text-decoration: none;
+}
+
+#upload p {
+	font-size: 13px;
+	color: rgb(60, 60, 65);
+	padding-bottom: 8px;
 }
 
 #imgcrop {
 	width: 100%;
 	overflow: hidden;
-	margin-bottom: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
 }
 
 #upload ul li img {

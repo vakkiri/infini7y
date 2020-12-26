@@ -36,30 +36,45 @@
 		{% with upload.upload_id as u %}
 
 		<li>
+		<section id="indexheader">
+		<span class="mediumtext">
+		<section id="indexuploadtext">
+			<h2><span class="plainlink"><a href="{%url 's7uploads:upload' upload.id %}">{{ u.title }} {{ upload.version_name }}</a></span> by <span class="bluelink"><a href="linktouser">{{ u.user.user.username }}</a></span></h2>
+			<a id="download" href="{%url 's7uploads:download' upload.id %}">⇣ Download</a>
+			{% if user|user_owns_upload:upload.user %}
+			<a id="download" href="{%url 's7uploads:edit' upload.id %}">Edit</a>
+			{% endif %}
+
+		</section>
+		</section>
+
 		{% if upload.upload_id.screenshot_set.exists %}
 		<section id="imgcrop">
             		<img src="{% get_media_prefix %}{{upload.upload_id.indexScreenshot}}" alt="{% get_media_prefix %}{{upload.upload_id.indexScreenshot}}" id="middle"></img>
 		</section>
 		{% endif %}
+		</span>
 		
 
 		<section id="indexuploadtext">
-			<h2><a href="{%url 's7uploads:upload' upload.id %}">{{ u.title }} {{ upload.version_name }}</a></h2>
-			<a id="download" href="{%url 's7uploads:download' upload.id %}">⇣ Download</a>
-			{% if user|user_owns_upload:upload.user %}
-			<a id="download" href="{%url 's7uploads:edit' upload.id %}">Edit</a>
-			{% endif %}
-			<h3>{{ u.user.user.username }} on {{ upload.date_added }} </h3>
-			<p>{{ u.description|truncatewords:20 }}</p>
-			<h4> Version {{upload.version_name}} Notes: </h4>
-			<p> {{ upload.version_notes|truncatewords:10 }} </p>
+			<p><b>Description: </b>{{ u.description|truncatewords:20 }}</p>
+			<br>
+			<p> <b>Version {{upload.version_name}} Notes: </b>{{ upload.version_notes|truncatewords:10 }} </p>
+			<br>
+			<h3>Posted on {{ upload.date_added }} </h3>
 		</section>
 		<section id="indexuploadtext">
+			{% if upload.upload_id.tags %}
+			<span class="blue">
 			<p>
-			{% for tag in upload.tags.all %}
-			#{{tag.name}}
-			{% endfor %}
-			<br>
+				{% for tag in upload.upload_id.tags.all %}
+				#{{tag.name}}
+				{% endfor %}
+				<br><br>
+			</p>
+			</span>
+			{% endif %}
+			<p>
 			{{u.total_downloads}} downloads, {{upload.total_stars}} stars
 			</p>
 		</section>
