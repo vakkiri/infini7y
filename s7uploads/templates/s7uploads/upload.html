@@ -26,7 +26,6 @@
 {% endif %}
 
 <section id="singleupload">
-<section id="upload">
 	<section id="uploadheader">
 		<a id="download" href="#">Download</a>
 		{% if user|user_owns_upload:upload.upload_id.user %}
@@ -39,36 +38,42 @@
 		</div>
 
 		<div id="blackstripe"></div>
-
-		<section id="uploadtext">
-			<h3>{{ upload.upload_id.user.user.username }} on {{ upload.date_added }} </h3>
-			<p>{{ upload.upload_id.description|linebreaks }}</p>
-			<h4> Version {{upload.version_name}} Notes: </h4>
-			<p> {{ upload.version_notes|linebreaks }} </p>
-			<h4> Upload Statistics: </h4><br>
-			<p>
-			downloads: {{upload.num_downloads}} <br>
-			stars: {{upload.total_stars}} <br>
-			</p>
-			<p>
-			{% for tag in upload.upload_id.tags.all %}
-			#{{tag.name}} 
-			{% endfor %}
-			</p>
-
-		</section>
-
-		<section id="thumbnailscreenshots">
-			{% for screenshot in upload.upload_id.screenshot_set.all %}
-				<section id="thumbnailscreenshot">
-                    <img src="{% get_media_prefix %}{{screenshot.url}}" alt="{{screenshot.url}}"></img>
-				</section>
-			{% endfor %}
-		</section>
 	</section>
 
+	<section id="thumbnailscreenshots">
+		{% for screenshot in upload.upload_id.screenshot_set.all %}
+			<section id="thumbnailscreenshot">
+			    <img src="{% get_media_prefix %}{{screenshot.url}}" alt="{{screenshot.url}}"></img>
+			</section>
+		{% endfor %}
+	</section>
+
+	<section id="uploadtext">
+		<h3>Updated {{ upload.date_added }} </h3>
+		<br>
+		<p>{{ upload.upload_id.description|linebreaks }}</p>
+		<br>
+		<h4> Version {{upload.version_name}} Notes: </h4>
+		<br>
+		<p> {{ upload.version_notes|linebreaks }} </p>
+		<br>
+		<h4> Upload Statistics: </h4><br>
+		<p>
+		downloads: {{upload.num_downloads}} <br>
+		stars: {{upload.total_stars}} <br>
+		</p>
+		<br>
+		<p>
+		{% for tag in upload.upload_id.tags.all %}
+		#{{tag.name}} 
+		{% endfor %}
+		</p>
+	</section>
+
+	</section>
+
+<section id="review">
 	{% if upload.review_set.exists %}
-		<section id="review">
 			<h1>Reviews</h1>
 			<div id="blackstripe"></div>
 
@@ -80,7 +85,7 @@
 				</form>
 			{% else %}
 				{% if not user|user_owns_upload:upload.user and not user.is_anonymous %}
-				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
+				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="addreview" >+ Add Review</a>
 				{% endif %}
 			<br>
 			<br>
@@ -97,8 +102,8 @@
 				</li>
 			{% endfor %}
 			</ul>
-		</section>
 	{% else %}
+		<br>
 		<h1>No reviews yet!</h1>
 			{% if form %}
 				<form action="add_review" method="post">
@@ -111,12 +116,8 @@
 			{% endif %}
 
 			<br>
-		</section>
 	{% endif %}
+	</section>
 </section>
 
-</section>
-
-
-</section>
 {% endblock %}

@@ -21,6 +21,7 @@ div#blackstripe {
 	height: 2px;
 	width: 100%;
 	margin-bottom: 8px;
+	margin-top: 8px;
 }
 
 div#graystripe {
@@ -33,7 +34,8 @@ div#graystripe {
 
 #userbanner {
 	position: fixed;
-	right: 64px;
+	position: relative;
+	float: right;
 	background-color: rgb(45, 45, 70);
 	padding: 16px;
 	border-radius: 8px;
@@ -104,6 +106,7 @@ div#graystripe {
 div#banner {
 	background-color: rgb(20, 20, 40);
 	position: fixed;
+	left: 0;
 	top: 2;
 	width: 100%;
 	display: inline-block;
@@ -126,14 +129,15 @@ div#searchbanner {
 	padding-bottom: 8px;
 	width: 100%;
 	display: flex;
-
+	justify-content: center;
 }
 
 #searchbannercontent {
+	margin-right: 32px;
 	background-color: rgb(255, 255, 255);
 	border-radius: 4px;
 	display: flex;
-	margin: 0 auto;
+	justify-content: center;
 }
 
 .searchicon {
@@ -166,6 +170,14 @@ div#searchbanner {
 	outline: none;
 }
 
+select::-ms-expand { 
+	display: none; 
+}
+
+select {
+	-webkit-appearance: none;
+	appearance: none;
+}
 
 .searchcategory {
 	font-size: 16;
@@ -175,6 +187,7 @@ div#searchbanner {
 	border: 0px;
 	background-color: rgb(255, 255, 255);
 	margin-right: 4px;
+	margin-left: 4px;
 }
 
 .searchcategory:focus {
@@ -220,15 +233,23 @@ div#searchbanner {
 #main-content {
 	margin: 0 auto;
 	margin-top: 128px;
+	width: 90%;
+	max-width: 1200px;
 }
 
-#main-content h1 {
-	font-weight: normal;
-	padding-bottom: 8px;
+#singleupload {
+	width: 50%;
+	margin: auto;
+	color: rgb(255, 255, 255);
+	background-color: rgb(40, 40, 60);
+	border-radius: 8px;
+	padding: 8px;
+	display: block;
+	overflow: auto;
 }
 
 #uploadheader {
-	width: 800px;
+	color: rgb(255, 255, 255);
 }
 
 div #upload-title {
@@ -240,7 +261,6 @@ div#upload-title h1 {
 	font-size: 24px;
 	display: inline;
 	text-decoration: none;
-	color: rgb(60, 60, 60);
 }
 
 div#upload-title h3 {
@@ -248,7 +268,6 @@ div#upload-title h3 {
 	font-size: 24px;
 	display: inline;
 	text-decoration: none;
-	color: rgb(60, 60, 60);
 }
 
 div#upload-title h2 {
@@ -259,54 +278,36 @@ div#upload-title h2 {
 	color: rgb(100, 170, 250);
 }
 
+#uploadtext {
+}
+
 #thumbnailscreenshots {
 	float: right;
-	position: relative;
+	width: 256px;
 }
 
 #thumbnailscreenshot {
-	width: 256px;
 	height: 128px;
 	overflow: hidden;
 	border-radius: 8px;
 	margin: 4px;
 	background-color: rgb(10, 5, 15);
-	text-align: center;
-}
-
-#thumbnailscreenshot img {
 	position: relative;
-	z-index: 0;
 }
 
 #thumbnailscreenshot img {
 	width: 100%;
 }
 
-#sidebar li a{
-	text-decoration: none;
-	color: rgb(60, 60, 65);
+#review {
+	margin: 0 auto;
+	width: 50%;
 }
 
 #upload {
 	margin: 0 auto;
-	width: 512px;
 	width: 50%;
 	position: relative;
-}
-
-#singleupload {
-	padding-left: 64px;
-	float: left;
-}
-
-#review {
-	width: 512px;
-	float: left;
-}
-
-#sidebar ul {
-	margin-top: 16px;
 }
 
 #upload ul {
@@ -337,22 +338,6 @@ div#upload-title h2 {
 	border-bottom: 2px solid rgb(50, 50, 70);
 }
 
-#uploadtext {
-	width: 512px;
-	padding: 6px;
-	float: left;
-	position: relative;
-}
-
-#sidebar h1 {
-	font-size: 28px;
-	font-weight: normal;
-}
-
-#upload h1 {
-	font-weight: normal;
-}
-
 #upload h2 {
 	font-weight: normal;
 	display: inline;
@@ -369,6 +354,13 @@ div#upload-title h2 {
 .plainlink a {
 	color: rgb(255, 255, 255);
 	text-decoration: none;
+}
+
+.whitetitle h1 {
+	color: rgb(255, 255, 255);
+	font-weight: bold;
+	font-size: 24px;
+	margin-bottom: 16px;
 }
 
 .bluelink a {
@@ -410,6 +402,15 @@ div#upload-title h2 {
 	padding-left: 8px;
 	padding-right: 8px;
 	margin-left: 4px;
+}
+
+#addreview {
+	float: right;
+	color: rgb(255, 255, 255);
+	background-color: rgb(100, 170, 250);
+	text-decoration: none;
+	font-size: 16px;
+	border-radius: 8px;
 }
 
 #editupload {
