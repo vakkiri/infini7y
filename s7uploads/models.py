@@ -19,10 +19,6 @@ class S7User(models.Model):
     def num_reviews(self):
         return Review.objects.filter(user=self).count()
 
-    def user_owns_upload(self, user):
-        print("hi")
-        return True
-
     def __str__(self):
         return self.user.username
 

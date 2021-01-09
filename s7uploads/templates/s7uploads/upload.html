@@ -49,14 +49,16 @@
 	</section>
 
 	<section id="uploadtext">
-		<h3>Updated {{ upload.date_added }} </h3>
-		<br>
 		<p>{{ upload.upload_id.description|linebreaks }}</p>
 		<br>
 		<h4> Version {{upload.version_name}} Notes: </h4>
 		<br>
 		<p> {{ upload.version_notes|linebreaks }} </p>
 		<br>
+
+		<h3>Updated {{ upload.date_added }} </h3>
+		<br>
+
 		<h4> Upload Statistics: </h4><br>
 		<p>
 		downloads: {{upload.num_downloads}} <br>
@@ -70,27 +72,33 @@
 		</p>
 	</section>
 
-	</section>
 
-<section id="review">
-	{% if upload.review_set.exists %}
-			<h1>Reviews</h1>
-			<div id="blackstripe"></div>
-
+	<section id="review">
+		<div id="blackstripe"></div>
 			{% if form %}
+				<br>
 				<form action="add_review" method="post">
 					{% csrf_token %}
-					{{ form }}
-					<input type="submit" value="Submit">
+					{{ form.title }}
+					{{ form.text }}
+					{{ form.rating }}
+					<br><br>
+					<span id="submitbutton">
+					<input type="submit" value="Add Review">
+					</span>
+					<br>
 				</form>
 			{% else %}
-				{% if not user|user_owns_upload:upload.user and not user.is_anonymous %}
+				{% if not user|user_owns_upload:upload.upload_id.user and not user.is_anonymous %}
 				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="addreview" >+ Add Review</a>
 				{% endif %}
 			<br>
 			<br>
 			{% endif %}
 
+		{% if upload.review_set.exists %}
+			<h1>Reviews</h1>
+			<div id="blackstripe"></div>
 
 			<ul>
 			{% for review in upload.review_set.all %}
@@ -102,22 +110,16 @@
 				</li>
 			{% endfor %}
 			</ul>
-	{% else %}
-		<br>
-		<h1>No reviews yet!</h1>
-			{% if form %}
-				<form action="add_review" method="post">
-					{% csrf_token %}
-					{{ form }}
-					<input type="submit" value="Submit">
-				</form>
-			{% else %}
-				<a href="{%url 's7uploads:add_review' pk=upload.pk%}" id="download" >+ Add Review</a>
-			{% endif %}
-
+		{% else %}
 			<br>
-	{% endif %}
+			<h1>No reviews yet!</h1>
+				<br>
+		{% endif %}
 	</section>
+
+
+</section>
+
 </section>
 
 {% endblock %}

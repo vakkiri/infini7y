@@ -17,6 +17,18 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ('title', 'text', 'rating')
 
+    def __init__(self, *args, **kwargs):
+        super(ReviewForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({
+            'placeholder': 'Review Title...',
+            'onfocus': "this.placeholder=''"
+            })
+        self.fields['text'].widget.attrs.update({
+            'placeholder': 'Review this upload...',
+            'onfocus': "this.placeholder=''"
+            })
+
+
 
 class SearchForm(forms.Form):
     search_line = forms.CharField(max_length=200)
@@ -52,7 +64,7 @@ class NewVersionForm(forms.Form):
     versionNotes = forms.CharField(required=True)
     versionNumber = forms.CharField(max_length=5, required=True)
     tagline = forms.CharField(required=False)
-
+    file = forms.FileField()
 
 
 class AddScreenshotForm(forms.Form):

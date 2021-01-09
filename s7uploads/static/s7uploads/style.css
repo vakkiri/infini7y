@@ -33,12 +33,12 @@ div#graystripe {
 }
 
 #userbanner {
-	position: fixed;
 	position: relative;
 	float: right;
 	background-color: rgb(45, 45, 70);
 	padding: 16px;
 	border-radius: 8px;
+	margin-top: 44px;
 }
 
 #userbanner-nolog {
@@ -238,7 +238,7 @@ select {
 }
 
 #singleupload {
-	width: 50%;
+	width: 60%;
 	margin: auto;
 	color: rgb(255, 255, 255);
 	background-color: rgb(40, 40, 60);
@@ -278,7 +278,8 @@ div#upload-title h2 {
 	color: rgb(100, 170, 250);
 }
 
-#uploadtext {
+#uploadtext h3 {
+	font-size: 14px;
 }
 
 #thumbnailscreenshots {
@@ -299,10 +300,7 @@ div#upload-title h2 {
 	width: 100%;
 }
 
-#review {
-	margin: 0 auto;
-	width: 50%;
-}
+
 
 #upload {
 	margin: 0 auto;
@@ -368,26 +366,102 @@ div#upload-title h2 {
 	text-decoration: none;
 }
 
+#community {
+	text-align: center;
+}
+
+#community h1 {
+	color: rgb(255, 255, 255);
+	font-size: 24px;
+}
+
+#community p {
+	color: rgb(255, 255, 255);
+}
+
 #community li {
+	width: 256px;
 	padding: 8px;
-	background-color: rgb(220, 220, 220);
+	background-color: rgb(45, 45, 70);
+	text-align: center;
+	margin: auto;
+	margin-bottom: 8px;
 }
 
 #community li a {
-	color: rgb(5, 0, 0);
+	color: rgb(255, 255, 255);
 }
+
+#review {
+	padding-top: 32px;
+	color: rgb(255, 255, 255);
+	padding-bottom: 16px;
+}
+
+#review form {
+	width: 75%;
+	border-radius: 8px;
+	background-color: rgb(20, 20, 40);
+	overflow: hidden;
+	padding: 8px;
+}
+
+#review input {
+	border: 0px;
+	background-color: rgba(0, 0, 0, 0);
+	color: rgb(255, 255, 255);
+	font-size: 20px;
+}
+
+#review input:focus {
+	outline: none;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+#review textarea {
+	width: 100%;
+	margin-top: 8px;
+	padding-top: 8px;
+	font-size: 16px;
+	border: 0px;
+	border-top: 1px solid rgba(40, 40, 60);
+	border-bottom: 1px solid rgba(40, 40, 60);
+	background-color: rgba(0, 0, 0, 0);
+	color: rgb(255, 255, 255);
+	resize: none;
+}
+
+#review textarea:focus {
+	outline: none;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+#submitbutton input {
+	height: 32px;
+	background-color: rgb(100, 170, 250);
+	color: rgb(255, 255, 255);
+	border-radius: 8px;
+	overflow: auto;
+	width: 100px;
+	font-size: 16px;
+}
+
+
 
 #review li{
 	padding: 8px;
-	background-color: rgb(245, 245, 245);
+	background-color: rgb(45, 45, 70);
 }
 
-#review h2 {
-	text-decoration: none;
+#review h1 {
+	float: left;
+}
+
+#review li a {
+	color: rgb(255, 255, 255);
 }
 
 #review-rating {
-	float: right;
 }
 
 #download {
@@ -405,12 +479,12 @@ div#upload-title h2 {
 }
 
 #addreview {
-	float: right;
 	color: rgb(255, 255, 255);
 	background-color: rgb(100, 170, 250);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 8px;
+	padding: 4px;
 }
 
 #editupload {
@@ -445,6 +519,11 @@ div#upload-title h2 {
 	border-radius: 8px;
 	padding: 4px;
 	right: 4px;
+}
+
+#upload h1 {
+	color: rgb(255, 255, 255);
+	font-size: 24px;
 }
 
 #upload h3 {
@@ -492,6 +571,14 @@ div#upload-title h2 {
 	padding-right: 8px;
 	display: inline-block;
 	border-radius: 4px;
+}
+
+#userlist ul li a {
+	color: rgb(255, 255, 255);
+}
+
+#userlist ul li h1 {
+	color: rgb(220, 220, 220);
 }
 
 #userlisttext {

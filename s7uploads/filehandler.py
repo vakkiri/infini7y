@@ -137,16 +137,18 @@ def handle_edit_upload(form, upload):
         add_tag(str(tagline), Upload.objects.get(pk=upload_id))
 
 
-def handle_version_upload(form, upload):
+def handle_version_upload(form, filepath, upload):
     data = form.cleaned_data
-    tagline = data.pop('tagline')
+    tagline = str(form.cleaned_data['tagline'])
     print(data)
-    version = UploadVersion.objects.filter(pk=upload.id)
     upload_id = UploadVersion.objects.get(pk=upload.id).upload_id.id
-    upload = Upload.objects.filter(pk=upload_id)
-    upload.update(**{"description": data['description']})
+    upload = Upload.objects.get(pk=upload_id)
+    Upload.objects.filter(pk=upload_id).update(**{"description": data['description']})
 
-    if len(tagline) > 0:
-        add_tag(str(tagline), Upload.objects.get(pk=upload_id))
+    # add the corresponding UploadVersion
+    add_version_to_db(form, filepath, upload)
+
+    # add tags
+    add_tag(tagline, upload)
 
 

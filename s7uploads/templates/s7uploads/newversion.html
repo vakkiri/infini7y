@@ -32,8 +32,7 @@
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
 
-		<a id="download" href="#">Download</a>
-		<a id="delete" href="{% url 's7uploads:delete' pk=upload.id %}">Delete</a>
+		<a id="delete" href="{% url 's7uploads:upload' pk=upload.id %}">Cancel</a>
 		<h1>{{upload.upload_id.title}} by {{ upload.upload_id.user.user.username }}</h1>
 
 		<div id="blackstripe"></div>
@@ -49,6 +48,11 @@
 
 			<h4> Tags </h4>
 			{{ form.tagline }}
+			<br>
+			<br>
+			
+			<h4>Choose File...</h4>
+			{{ form.file }}
 			<br>
 			<br>
 			<input type="submit" name='submit-edit' value="Submit Changes">

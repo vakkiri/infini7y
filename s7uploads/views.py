@@ -23,7 +23,11 @@ def about_view(request):
 
 
 def community_view(request):
-    return render(request, 's7uploads/community.html')
+    if request.method == 'POST':
+        return render(request, 's7uploads/community.html')
+    else:
+        searchform = SearchForm()
+        return render(request, 's7uploads/community.html', {'search_form': searchform})
 
 
 def search_uploads(request, params='', page=0):
@@ -52,7 +56,7 @@ def add_review(request, pk):
                 review = form.save(commit=False)
                 review.pubDate = timezone.now()
                 review.upload = UploadVersion.objects.get(pk=pk)
-                review.user = S7User.objects.get(pk=1)
+                review.user = S7User.objects.get(user=request.user)
                 review.save()
 
                 url = '/s7uploads/uploads/' + str(pk)
@@ -60,7 +64,8 @@ def add_review(request, pk):
 
         else:
             form = ReviewForm()
-            return render(request, 's7uploads/upload.html', {'upload': UploadVersion.objects.get(pk=pk), 'form': form})
+            searchform = SearchForm(request.POST)
+            return render(request, 's7uploads/upload.html', {'upload': UploadVersion.objects.get(pk=pk), 'form': form, 'search_form': searchform})
     else:
         return redirect('s7uploads:signup')
 
@@ -69,7 +74,7 @@ def delete_upload(request, pk):
     user = request.user
     upload = UploadVersion.objects.get(pk=pk)
 
-    if not user.is_anonymous and upload is not None and upload.user.user.id == user.id:
+    if not user.is_anonymous and upload is not None and upload.upload_id.user.user.id == user.id:
         upload.delete()
     else:
         print("Unauthorized attempt to delete upload.")
@@ -136,7 +141,7 @@ def download_file(request, pk):
     upload = UploadVersion.objects.get(pk=pk)
     upload.num_downloads += 1
     upload.save(update_fields=['num_downloads'])
-    return handle_download_file(upload.url)
+    return handle_download_file(upload.file_id.url)
 
 
 def upload_file(request):
@@ -351,7 +356,6 @@ class EditUploadView(generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.id == self.get_object().upload_id.user.user.id:
-            print(request.POST)
             if 'submit-ss' in request.POST:
                 return self.handle_ss_form(request)
             elif 'submit-edit' in request.POST:
@@ -409,7 +413,7 @@ class NewVersionView(generic.DetailView):
     def handle_edit_form(self, request):
         form = NewVersionForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_version_upload(form, self.get_object())
+            handle_version_upload(form, request.FILES['file'], self.get_object())
             return redirect('s7uploads:upload', pk=self.get_object().id)
         else:
             # TODO: Give some kind of notification of which fields were wrong, redirect to edit page
@@ -436,7 +440,6 @@ class NewVersionView(generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.id == self.get_object().upload_id.user.user.id:
-            print(request.POST)
             if 'submit-ss' in request.POST:
                 return self.handle_ss_form(request)
             elif 'submit-edit' in request.POST:
@@ -463,7 +466,7 @@ class NewVersionView(generic.DetailView):
         tags = Tag.objects.filter(uploads__exact=self.object.upload_id)
         tags = ' '.join(['#' + tag.name for tag in tags])
         initials['tagline'] = tags
-        form = EditUploadForm(initial=initials)
+        form = NewVersionForm(initial=initials)
         c['form'] = form
         c['search_form'] = SearchForm()
         c['screenshotform'] = AddScreenshotForm()
