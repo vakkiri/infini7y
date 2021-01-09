@@ -306,6 +306,7 @@ div#upload-title h2 {
 	margin: 0 auto;
 	width: 50%;
 	position: relative;
+	color: rgb(220, 220, 220);
 }
 
 #upload ul {

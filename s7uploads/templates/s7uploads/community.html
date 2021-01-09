@@ -7,10 +7,12 @@
 <section id="main-content">
 
 {% if user %}
-	<section id="userbanner">
 		{% if user.is_anonymous %}
+		<section id="userbanner-nolog">
 			<h4>You are not logged in!</h4>
+		</section>
 		{% else %}
+		<section id="userbanner">
 			<img src="/static/s7uploads/images/default_profile.jpg"></img>
 			<section id="userbannertext">
 			<h3><a href="{% url 's7uploads:index' %}?tags={{user.username}}">{{ user.username }}</a></h3>
@@ -20,8 +22,8 @@
 			<a href="{%url 's7uploads:new_upload' %}">+ Upload</a>
 			</section>
 			</section>
+		</section>
 		{% endif %}
-	</section>
 {% endif %}
 
 
