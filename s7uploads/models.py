@@ -31,7 +31,7 @@ def update_user(sender, instance, created, **kwargs):
 
 class Upload(models.Model):
     user = models.ForeignKey(S7User, on_delete=models.CASCADE)
-    title = models.CharField(max_length = 50)
+    title = models.CharField(max_length=50)
     description = models.TextField(verbose_name="Upload Description")
     total_downloads = models.IntegerField()
 
@@ -79,7 +79,6 @@ class Tag(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        print("slug: ", self.slug)
         super(Tag, self).save(*args, **kwargs)
 
 

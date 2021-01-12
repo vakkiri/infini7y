@@ -33,8 +33,8 @@ class ReviewForm(forms.ModelForm):
 class SearchForm(forms.Form):
     search_line = forms.CharField(max_length=200)
 
-    def __init__(self):
-        super(SearchForm, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['search_line'].widget.attrs.update({
             'placeholder': '  Search infini7y...',
             'onfocus': "this.placeholder=''"

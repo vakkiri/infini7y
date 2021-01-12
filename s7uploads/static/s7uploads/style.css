@@ -1,3 +1,11 @@
+:root {
+	--page-bg: rgb(25, 25, 40);
+	--element-bg: rgb(40, 40, 60);
+	--element-bg-hover: rgb(45, 45, 70);
+	--element-bg-divider: rgb(50, 50, 70);
+	--site-blue: rgb(100, 170, 250);
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -5,11 +13,11 @@
 }
 
 body {
-	background-color: rgb(25, 25, 40);
+	background-color: var(--page-bg);
 }
 
 div#stripe {
-	background-color: rgb(80, 170, 250);
+	background-color: var(--site-blue);
 	height: 2px;
 	width: 100%;
 	position: fixed;
@@ -35,7 +43,7 @@ div#graystripe {
 #userbanner {
 	position: relative;
 	float: right;
-	background-color: rgb(45, 45, 70);
+	background-color: var(--element-bg-hover);
 	padding: 16px;
 	border-radius: 8px;
 	margin-top: 44px;
@@ -46,8 +54,8 @@ div#graystripe {
 	padding: 8px;
 	border-radius: 8px;
 	border: 1px solid;
-	border-color: rgb(100, 170, 250);
-	background-color: rgb(100, 170, 250);
+	border-color: var(--site-blue);
+	background-color: var(--site-blue);
 	color: rgb(255, 255, 255);
 	float: right;
 }
@@ -92,7 +100,7 @@ div#graystripe {
 
 #sideupload a {
 	color: rgb(255, 255, 255);
-	background-color: rgb(100, 170, 250);
+	background-color: var(--site-blue);
 	text-decoration: none;
 	text-align: center;
 	font-size: 14px;
@@ -241,7 +249,7 @@ select {
 	width: 60%;
 	margin: auto;
 	color: rgb(255, 255, 255);
-	background-color: rgb(40, 40, 60);
+	background-color: var(--element-bg);
 	border-radius: 8px;
 	padding: 8px;
 	display: block;
@@ -275,7 +283,7 @@ div#upload-title h2 {
 	font-size: 24px;
 	display: inline;
 	text-decoration: none;
-	color: rgb(100, 170, 250);
+	color: var(--site-blue);
 }
 
 #uploadtext h3 {
@@ -315,14 +323,14 @@ div#upload-title h2 {
 
 #upload li {
 	list-style-type: none;
-	background-color: rgb(40, 40, 60);
+	background-color: var(--element-bg);
 	border-radius: 8px;
 	margin-bottom: 16px;
 	padding-top: 6px;
 }
 
 #upload li:hover {
-	background-color: rgb(45, 45, 70);
+	background-color: var(--element-bg-hover);
 }
 
 #indexuploadtext {
@@ -334,7 +342,7 @@ div#upload-title h2 {
 }
 
 #indexheader {
-	border-bottom: 2px solid rgb(50, 50, 70);
+	border-bottom: 2px solid var(--element-bg-divider);
 }
 
 #upload h2 {
@@ -347,7 +355,7 @@ div#upload-title h2 {
 }
 
 .blue p {
-	color: rgb(100, 170, 250);
+	color: var(--site-blue);
 }
 
 .plainlink a {
@@ -363,7 +371,7 @@ div#upload-title h2 {
 }
 
 .bluelink a {
-	color: rgb(100, 170, 250);
+	color: var(--site-blue);
 	text-decoration: none;
 }
 
@@ -383,7 +391,7 @@ div#upload-title h2 {
 #community li {
 	width: 256px;
 	padding: 8px;
-	background-color: rgb(45, 45, 70);
+	background-color: var(--element-bg);
 	text-align: center;
 	margin: auto;
 	margin-bottom: 8px;
@@ -425,8 +433,8 @@ div#upload-title h2 {
 	padding-top: 8px;
 	font-size: 16px;
 	border: 0px;
-	border-top: 1px solid rgba(40, 40, 60);
-	border-bottom: 1px solid rgba(40, 40, 60);
+	border-top: 1px solid var(element-bg);
+	border-bottom: 1px solid var(element-bg);
 	background-color: rgba(0, 0, 0, 0);
 	color: rgb(255, 255, 255);
 	resize: none;
@@ -439,7 +447,7 @@ div#upload-title h2 {
 
 #submitbutton input {
 	height: 32px;
-	background-color: rgb(100, 170, 250);
+	background-color: var(--site-blue);
 	color: rgb(255, 255, 255);
 	border-radius: 8px;
 	overflow: auto;
@@ -447,11 +455,9 @@ div#upload-title h2 {
 	font-size: 16px;
 }
 
-
-
 #review li{
 	padding: 8px;
-	background-color: rgb(45, 45, 70);
+	background-color: var(--element-bg);
 }
 
 #review h1 {
@@ -468,7 +474,7 @@ div#upload-title h2 {
 #download {
 	float: right;
 	color: rgb(255, 255, 255);
-	background-color: rgb(100, 170, 250);
+	background-color: var(--site-blue);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 8px;
@@ -481,7 +487,7 @@ div#upload-title h2 {
 
 #addreview {
 	color: rgb(255, 255, 255);
-	background-color: rgb(100, 170, 250);
+	background-color: var(--site-blue);
 	text-decoration: none;
 	font-size: 16px;
 	border-radius: 8px;
@@ -553,7 +559,7 @@ div#upload-title h2 {
 	text-decoration: none;
 	color: rgb(255, 250, 255);
 	border-style: solid;
-	border-color: rgb(100, 170, 250);
+	border-color: var(--site-blue);
 	border-radius: 8px;
 	padding: 4px;
 	border-width: 1px;
@@ -620,10 +626,10 @@ div#upload-title h2 {
 	font-weight: bold;
 	font-size: 18px;
 	color: rgb(255, 255, 255);
-	background-color: rgb(100, 170, 250);
+	background-color: var(--site-blue);
 	border-radius: 3px;
 }
 
 .sitecolor {
-	color: rgb(100, 170, 250);
+	color: var(--site-blue);
 }

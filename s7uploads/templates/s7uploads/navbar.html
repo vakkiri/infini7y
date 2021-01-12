@@ -33,8 +33,8 @@
 			{% for field in search_form %}
 			{{ field }}
 			{% endfor %}
-		</form>
-		<select name="searchcategory" id="searchcategory" class="searchcategory">
+
+			<select name="searchcategory" id="searchcategory" class="searchcategory">
 			<option value="any" selected>All Files</option>
 			<option value="maps">Maps</option>
 			<option value="scenarios">Scenarios</option>
@@ -43,8 +43,6 @@
 			<option value="utilities">Utilities</option>
 			<option value="physics">Physics</option>
 		</select>
-	</section>
-	<section id="searchbannercontent">
 		<select name="searchorder" id="searchorder" class="searchcategory">
 			<option value="newest" selected>Newest</option>
 			<option value="oldest">Oldest</option>
@@ -52,6 +50,9 @@
 			<option value="mostrated">Most Rated</option>
 			<option value="mostdownloads">Most Downloads</option>
 		</select>
+
+
+		</form>
 	</section>
 </div>
 

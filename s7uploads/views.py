@@ -9,14 +9,13 @@ from django.utils import timezone
 from django.urls import path
 from django.views import generic
 
+import operator
+
 from .models import *
 from .forms import *
 
 from .authorization import authorize_file_upload
 from .filehandler import *
-
-from .urltools import strip_get_tags
-
 
 def about_view(request):
     return render(request, 's7uploads/about.html')
@@ -35,9 +34,16 @@ def search_uploads(request, params='', page=0):
         form = SearchForm(request.POST)
 
         if form.is_valid():
-            params = strip_get_tags(params)
-            get_line = '?tags=' + str(form.cleaned_data.get('search_line'))
-            get_line = get_line + '&' + params if len(params) > 0 else get_line
+            search_tags = form.cleaned_data.get('search_line')
+            sort_by = request.POST['searchorder']
+            filter_by = request.POST['searchcategory']
+
+            tag_line = 'tags=' + search_tags
+            sort_line = 'sort=' + sort_by
+            filter_line = 'filter=' + filter_by
+
+
+            get_line = '?' + '&'.join([tag_line, sort_line, filter_line])
             url = '/s7uploads/' + get_line
             return HttpResponseRedirect(url)
 
@@ -176,6 +182,14 @@ class IndexView(generic.ListView):
     total_num_uploads = 0
     uploads_per_page = 7
 
+    # select option -> filter param
+    order_dict = {
+            'newest': '-date_added',
+            'oldest': 'date_added',
+            'bestrated': '',
+            'mostrated': '',
+            'mostdownloads': ''
+    }
 
     def get_uploads_in_range(self, uploads):
         # the -1 is due to displaying start page as 1 instead of 0 in browser
@@ -186,61 +200,61 @@ class IndexView(generic.ListView):
 
 
     def get_queryset(self):
-        uploads = UploadVersion.objects.filter(date_added__lte=timezone.now())
         get = self.request.GET
+    
+        uploads = Upload.objects.none()
+        tagged_uploads = Upload.objects.none()
+        named_uploads = Upload.objects.none()
+        tagged_versions = UploadVersion.objects.none()
+        named_versions = UploadVersion.objects.none()
 
-        order_by = get.get('order_by')
-        filter_tag = get.get('filter')
-        search_tag = get.get('tags')
+        # default ordering if no order is supplied
+        order_by = IndexView.order_dict['newest']
 
-        order_by = '-date_added' if order_by is None else order_by
-
-
-        # filter based on selected filters
-        if filter_tag is not None:
-            filter_tag = Tag.objects.filter(slug=filter_tag).first()
-            if filter_tag is not None:
-                tag_id = filter_tag.id
-                uploads = uploads.filter(tags__id=tag_id).distinct()
-            else:
-                self.total_num_uploads = 0
-                return None
-
-        if (order_by == 'ratings'):
-            uploads = sorted(uploads, key=lambda u: -u.avg_review())
+        if len(get) == 0:
+            uploads = UploadVersion.objects.filter(date_added__lte=timezone.now())
         else:
-            uploads =  uploads.order_by(order_by)
+            order_by = get.get('sort')
+            filter_by = get.get('filter')
+            search_tag = get.get('tags')
 
-        # Filter based on tags
-        if search_tag is not None:
-            print("tags: ", search_tag)
-            search_user = S7User.objects.filter(user__username=search_tag).first()
-            search_tag = Tag.objects.filter(slug=search_tag).first()
+            if order_by in IndexView.order_dict:
+                order_by = IndexView.order_dict[order_by]
 
-            tag_matches = None
-            user_matches = None
+            tags = [tag.strip() for tag in search_tag.split()]
 
-            if search_tag is not None:
-                tag_id = search_tag.id
-                tag_matches = uploads.filter(tags__id=tag_id).distinct()
-            if search_user is not None:
-                user_id = search_user.id
-                if order_by == 'ratings':
-                    user_matches = [upload for upload in uploads if upload.user.id == user_id]
-                else:
-                    user_matches = uploads.filter(upload_id__user__id=user_id).distinct()
-
-            if tag_matches is not None and user_matches is not None:
-                uploads = tag_matches | user_matches
-            elif tag_matches is not None:
-                uploads = tag_matches
-            elif user_matches is not None:
-                uploads = user_matches
+            # TODO: filter all_uploads based on filter_by
+            if filter_by != None and filter_by in ('maps', 'scenarios', 'plugins', 'scripts', 'utilities', 'physics'):
+                try:
+                    tag_obj = Tag.objects.get(slug=filter_by)
+                except:
+                    all_uploads = Upload.objects.none()
             else:
-                uploads = []
+                all_uploads = Upload.objects.all()
+
+            for tag in tags:
+                # get uploads with matching tags
+                try:
+                    tag_obj = Tag.objects.get(slug=tag)
+                    if tag_obj:
+                        tagged_uploads = (tagged_uploads | all_uploads.filter(tags=tag_obj))
+                except:
+                    continue
+
+            tagged_versions = UploadVersion.objects.filter(upload_id__in=tagged_uploads)
+
+            # get uploads with matching name
+            for tag in tags:
+                if len(tag) >= 3:
+                    named_uploads = named_uploads | all_uploads.filter(title__contains=tag)
+
+            named_versions = UploadVersion.objects.filter(upload_id__in=named_uploads)
+
+            uploads = (tagged_versions | named_versions).distinct()
 
         self.total_num_uploads = len(uploads)
-        return self.get_uploads_in_range(uploads)
+
+        return self.get_uploads_in_range(uploads.order_by(order_by))
 
 
     def get_page_list(self):

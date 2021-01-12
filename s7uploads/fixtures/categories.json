@@ -1,0 +1,53 @@
+[
+	{
+		"model": "s7uploads.Tag",
+		"pk": 1,
+		"fields": {
+			"name": "maps",
+			"slug": "maps"
+		}
+	},
+	{
+		"model": "s7uploads.Tag",
+		"pk": 2,
+		"fields": {
+			"name": "scenarios",
+			"slug": "scenarios"
+		}
+	},
+	{
+		"model": "s7uploads.Tag",
+		"pk": 3,
+		"fields": {
+			"name": "plugins",
+			"slug: "plugins"
+		}
+	},
+	{
+		"model": "s7uploads.Tag",
+		"pk": 4,
+		"fields": {
+			"name": "scripts",
+			"slug": "scripts"
+		}
+	},
+	{
+		"model": "s7uploads.Tag",
+		"pk": 5,
+		"fields": {
+			"name": "utilities",
+			"slug": "utilities"
+			
+		}
+	},
+	{
+		"model": "s7uploads.Tag",
+		"pk": 6,
+		"fields": {
+			"name": "physics",
+			"slug": "physics"
+		}
+	}
+
+]
+
