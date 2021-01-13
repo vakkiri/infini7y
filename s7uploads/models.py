@@ -1,5 +1,5 @@
 import datetime
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Avg
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
@@ -46,6 +46,9 @@ class Upload(models.Model):
         else:
             return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
 
+    def num_reviews(self):
+        return review_set.count()
+
     def __str__(self):
         return self.title
 
@@ -61,6 +64,8 @@ class UploadVersion(models.Model):
     version_notes = models.TextField()
     version_name = models.CharField(max_length=10)
     num_downloads = models.IntegerField()
+    ranking = models.IntegerField()
+    avg_rating = models.DecimalField(decimal_places=2, max_digits=10)
 
     def total_stars(self):
         reviews = Review.objects.filter(upload=self)
@@ -69,6 +74,15 @@ class UploadVersion(models.Model):
             return 0
         else:
             return reviews.aggregate(Sum('rating'))['rating__sum']
+
+    def update_ranking(self):
+        reviews = Review.objects.filter(upload=self)
+        _avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+        new_ranking = 0
+        #TODO:... new smart ranking
+        self.ranking = new_ranking
+        self.avg_rating = _avg_rating
+        self.save()
 
 
 class Tag(models.Model):
@@ -100,4 +114,5 @@ class Review(models.Model):
 
     def __str__(self):
         return self.user.user.username + self.upload.title
+
 

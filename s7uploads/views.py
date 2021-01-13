@@ -1,6 +1,6 @@
 import math
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -64,6 +64,7 @@ def add_review(request, pk):
                 review.upload = UploadVersion.objects.get(pk=pk)
                 review.user = S7User.objects.get(user=request.user)
                 review.save()
+                review.upload.update_ranking()
 
                 url = '/s7uploads/uploads/' + str(pk)
                 return HttpResponseRedirect(url)
@@ -144,10 +145,13 @@ def signup(request):
 
 
 def download_file(request, pk):
-    upload = UploadVersion.objects.get(pk=pk)
-    upload.num_downloads += 1
-    upload.save(update_fields=['num_downloads'])
-    return handle_download_file(upload.file_id.url)
+    version = UploadVersion.objects.get(pk=pk)
+    upload = version.upload_id
+    upload.total_downloads += 1
+    version.num_downloads += 1
+    version.save(update_fields=['num_downloads'])
+    upload.save(update_fields=['total_downloads'])
+    return handle_download_file(version.file_id.url)
 
 
 def upload_file(request):
@@ -186,9 +190,9 @@ class IndexView(generic.ListView):
     order_dict = {
             'newest': '-date_added',
             'oldest': 'date_added',
-            'bestrated': '',
-            'mostrated': '',
-            'mostdownloads': ''
+            'bestrated': '-avg_rating',
+            'mostrated': '-num_reviews',
+            'mostdownloads': '-upload_id__total_downloads'
     }
 
     def get_uploads_in_range(self, uploads):
@@ -221,9 +225,6 @@ class IndexView(generic.ListView):
             if order_by in IndexView.order_dict:
                 order_by = IndexView.order_dict[order_by]
 
-            tags = [tag.strip() for tag in search_tag.split()]
-
-            # TODO: filter all_uploads based on filter_by
             if filter_by != None and filter_by in ('maps', 'scenarios', 'plugins', 'scripts', 'utilities', 'physics'):
                 try:
                     tag_obj = Tag.objects.get(slug=filter_by)
@@ -232,29 +233,35 @@ class IndexView(generic.ListView):
             else:
                 all_uploads = Upload.objects.all()
 
-            for tag in tags:
-                # get uploads with matching tags
-                try:
-                    tag_obj = Tag.objects.get(slug=tag)
-                    if tag_obj:
-                        tagged_uploads = (tagged_uploads | all_uploads.filter(tags=tag_obj))
-                except:
-                    continue
+            
+            if len(search_tag) > 0:
+                tags = [tag.strip() for tag in search_tag.split()]
 
-            tagged_versions = UploadVersion.objects.filter(upload_id__in=tagged_uploads)
+                for tag in tags:
+                    # get uploads with matching tags
+                    try:
+                        tag_obj = Tag.objects.get(slug=tag)
+                        if tag_obj:
+                            tagged_uploads = (tagged_uploads | all_uploads.filter(tags=tag_obj))
+                    except:
+                        continue
 
-            # get uploads with matching name
-            for tag in tags:
-                if len(tag) >= 3:
-                    named_uploads = named_uploads | all_uploads.filter(title__contains=tag)
+                tagged_versions = UploadVersion.objects.filter(upload_id__in=tagged_uploads)
 
-            named_versions = UploadVersion.objects.filter(upload_id__in=named_uploads)
+                # get uploads with matching name
+                for tag in tags:
+                    if len(tag) >= 3:
+                        named_uploads = named_uploads | all_uploads.filter(title__contains=tag)
 
-            uploads = (tagged_versions | named_versions).distinct()
+                named_versions = UploadVersion.objects.filter(upload_id__in=named_uploads)
+
+                uploads = (tagged_versions | named_versions).distinct()
+            else:
+                uploads = UploadVersion.objects.filter(upload_id__in=all_uploads)
 
         self.total_num_uploads = len(uploads)
 
-        return self.get_uploads_in_range(uploads.order_by(order_by))
+        return self.get_uploads_in_range(uploads.annotate(num_reviews=Count('review')).order_by(order_by))
 
 
     def get_page_list(self):

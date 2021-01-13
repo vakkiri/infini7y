@@ -31,7 +31,7 @@ class ReviewForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    search_line = forms.CharField(max_length=200)
+    search_line = forms.CharField(max_length=200, required=False)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
