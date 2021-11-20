@@ -101,6 +101,18 @@ def delete_screenshot(request, pk):
     # TODO: redirect to previously viewed upload
     return redirect('s7uploads:index')
 
+def delete_review(request, pk):
+    user = request.user
+    review = Review.objects.get(pk=pk)
+    upload_id = review.upload.id
+
+    if not user.is_anonymous and review is not None and review.user.user.id == user.id:
+        review.delete()
+    else:
+        print("Unauthorized attempt to delete review")
+
+    # TODO: just refresh instead?
+    return redirect('s7uploads:upload', upload_id)
 
 def user_login(request):
     if request.method == 'POST':

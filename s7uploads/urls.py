@@ -18,6 +18,7 @@ urlpatterns = [
 	path('edit/<int:pk>/', views.EditUploadView.as_view(), name='edit'),
 	path('newversion/<int:pk>/', views.NewVersionView.as_view(), name='newversion'),
 	path('delete/<int:pk>/', views.delete_upload, name='delete'),
+	path('delete_review/<int:pk>/', views.delete_review, name='delete_review'),
 	path('delete_ss/<int:pk>/', views.delete_screenshot, name='delete_ss'),
 	path('new_upload/', views.upload_file, name='new_upload'),
 	path('uploads/<int:pk>/add_review', views.add_review, name='add_review'),

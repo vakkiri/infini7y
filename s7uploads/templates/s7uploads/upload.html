@@ -105,6 +105,9 @@
 			<ul>
 			{% for review in upload.review_set.all %}
 				<li>
+				{% if user|user_owns_review:review and not user.is_anonymous %}
+					<a id="delete" href="{% url 's7uploads:delete_review' pk=review.id %}">Delete</a>
+				{% endif %}
 				<h2 class="review">{{review.title}}</h2>
 				<h3 id="review-rating">{{review.rating}}/5</h3>
 				<h3>By {{review.user.user.username}} on {{review.pubDate}}</h3>
