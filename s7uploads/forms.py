@@ -4,30 +4,33 @@ from django.contrib.auth.models import User
 
 from .models import Review, Upload
 
+
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(help_text = '*')
+    email = forms.EmailField(help_text="*")
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', )
+        fields = (
+            "username",
+            "email",
+            "password1",
+            "password2",
+        )
 
 
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('title', 'text', 'rating')
+        fields = ("title", "text", "rating")
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({
-            'placeholder': 'Review Title...',
-            'onfocus': "this.placeholder=''"
-            })
-        self.fields['text'].widget.attrs.update({
-            'placeholder': 'Review this upload...',
-            'onfocus': "this.placeholder=''"
-            })
-
+        self.fields["title"].widget.attrs.update(
+            {"placeholder": "Review Title...", "onfocus": "this.placeholder=''"}
+        )
+        self.fields["text"].widget.attrs.update(
+            {"placeholder": "Review this upload...", "onfocus": "this.placeholder=''"}
+        )
 
 
 class SearchForm(forms.Form):
@@ -35,10 +38,9 @@ class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['search_line'].widget.attrs.update({
-            'placeholder': '  Search infini7y...',
-            'onfocus': "this.placeholder=''"
-            })
+        self.fields["search_line"].widget.attrs.update(
+            {"placeholder": "  Search infini7y...", "onfocus": "this.placeholder=''"}
+        )
 
 
 class UploadFileForm(forms.Form):
@@ -47,7 +49,9 @@ class UploadFileForm(forms.Form):
     versionNotes = forms.CharField(required=False)
     versionNumber = forms.CharField(max_length=5)
     file = forms.FileField()
-    screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    screenshots = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True}), required=False
+    )
     tagline = forms.CharField(required=False)
 
 
@@ -68,6 +72,6 @@ class NewVersionForm(forms.Form):
 
 
 class AddScreenshotForm(forms.Form):
-    screenshots = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
-
-
+    screenshots = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True})
+    )

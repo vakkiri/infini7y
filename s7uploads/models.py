@@ -44,7 +44,7 @@ class Upload(models.Model):
         if num_reviews == 0:
             return 0
         else:
-            return reviews.aggregate(Sum('rating'))['rating__sum'] / reviews.count()
+            return reviews.aggregate(Sum("rating"))["rating__sum"] / reviews.count()
 
     def num_reviews(self):
         return review_set.count()
@@ -64,7 +64,6 @@ class UploadVersion(models.Model):
     version_notes = models.TextField()
     version_name = models.CharField(max_length=10)
     num_downloads = models.IntegerField()
-    ranking = models.IntegerField()
     avg_rating = models.DecimalField(decimal_places=2, max_digits=10)
 
     def total_stars(self):
@@ -73,15 +72,11 @@ class UploadVersion(models.Model):
         if num_reviews == 0:
             return 0
         else:
-            return reviews.aggregate(Sum('rating'))['rating__sum']
+            return reviews.aggregate(Sum("rating"))["rating__sum"]
 
     def update_ranking(self):
         reviews = Review.objects.filter(upload=self)
-        _avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-        new_ranking = 0
-        #TODO:... new smart ranking
-        self.ranking = new_ranking
-        self.avg_rating = _avg_rating
+        self.avg_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
         self.save()
 
 
@@ -89,7 +84,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
 
-    uploads = models.ManyToManyField(Upload, related_name='tags')
+    uploads = models.ManyToManyField(Upload, related_name="tags")
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -97,7 +92,7 @@ class Tag(models.Model):
 
 
 class Screenshot(models.Model):
-    url = models.CharField(max_length = 100)
+    url = models.CharField(max_length=100)
     upload = models.ForeignKey(Upload, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -105,14 +100,14 @@ class Screenshot(models.Model):
 
 
 class Review(models.Model):
-    title = models.CharField(max_length = 50)
-    text = models.TextField(max_length = 2048, verbose_name="Review Text")
+    title = models.CharField(max_length=50)
+    text = models.TextField(max_length=2048, verbose_name="Review Text")
     upload = models.ForeignKey(UploadVersion, on_delete=models.CASCADE)
     user = models.ForeignKey(S7User, on_delete=models.CASCADE)
-    pubDate = models.DateTimeField('date published')
-    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    pubDate = models.DateTimeField("date published")
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
     def __str__(self):
         return self.user.user.username + self.upload.title
-
-

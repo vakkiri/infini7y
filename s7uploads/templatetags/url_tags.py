@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.simple_tag
 def update_query(request, **kwargs):
     updated = request.GET.copy()
@@ -10,6 +11,7 @@ def update_query(request, **kwargs):
         updated[k] = kwargs[k]
 
     return updated.urlencode()
+
 
 @register.simple_tag
 def toggle_query(request, **kwargs):
@@ -25,4 +27,3 @@ def toggle_query(request, **kwargs):
             updated[k] = kwargs[k]
 
     return updated.urlencode()
-
