@@ -24,7 +24,10 @@ DEBUG = json.load(open("deployment_config.json"))["debug"]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-SECRET_KEY = os.environ['I7_DJANGO_SECRET_KEY']
+if not DEBUG:
+    SECRET_KEY = os.environ['I7_DJANGO_SECRET_KEY']
+else:
+    SECRET_KEY = json.load(open("test_config.json"))["SECRET_KEY"]
 
 
 ALLOWED_HOSTS = []
